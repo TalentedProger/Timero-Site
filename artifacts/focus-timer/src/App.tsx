@@ -4,6 +4,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import TimerPage from "@/pages/TimerPage";
+import { SettingsProvider } from "@/contexts/SettingsContext";
+import { HistoryProvider } from "@/contexts/HistoryContext";
 
 const queryClient = new QueryClient();
 
@@ -19,12 +21,16 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
+      <SettingsProvider>
+        <HistoryProvider>
+          <TooltipProvider>
+            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+              <Router />
+            </WouterRouter>
+            <Toaster />
+          </TooltipProvider>
+        </HistoryProvider>
+      </SettingsProvider>
     </QueryClientProvider>
   );
 }

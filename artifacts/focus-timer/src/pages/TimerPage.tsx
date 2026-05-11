@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { TimerDisplay } from "@/components/timer/TimerDisplay";
 import { TimerControls } from "@/components/timer/TimerControls";
 import { SessionPresets } from "@/components/timer/SessionPresets";
-import { TaskInput } from "@/components/timer/TaskInput";
 import { TimePickerPanel } from "@/components/timer/TimePickerPanel";
 import { LeftPanel } from "@/components/panels/LeftPanel";
 import { RightPanel } from "@/components/panels/RightPanel";
@@ -15,14 +14,6 @@ import { useHistory } from "@/hooks/useHistory";
 import { calculateStats } from "@/lib/stats";
 import { backgrounds } from "@/lib/backgrounds";
 
-const QUOTES = [
-  "Focus is the art of knowing what to ignore.",
-  "One task at a time. That is the whole secret.",
-  "Deep work is the superpower of the 21st century.",
-  "Energy flows where attention goes.",
-  "The quality of your work is shaped by the quality of your focus.",
-];
-
 export default function TimerPage() {
   const { settings, setSettings } = useSettings();
   const { addSession, history } = useHistory();
@@ -32,7 +23,6 @@ export default function TimerPage() {
   const [isRightOpen, setIsRightOpen] = useState(false);
   const [isMinimalMode, setIsMinimalMode] = useState(false);
   const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
-  const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
 
   const timer = useTimer(settings.defaultDuration);
   const stats = calculateStats(history);
@@ -98,9 +88,9 @@ export default function TimerPage() {
   const formatTotalTime = (minutes: number) => {
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
-    if (h > 0 && m > 0) return `${h}h ${m}m focused`;
-    if (h > 0) return `${h}h focused`;
-    return `${m}m focused`;
+    if (h > 0 && m > 0) return `${h}h ${m}m`;
+    if (h > 0) return `${h}h`;
+    return `${m}m`;
   };
 
   return (
@@ -117,7 +107,7 @@ export default function TimerPage() {
         >
           <img src={bgImage} alt="background" className="w-full h-full object-cover" />
           <div
-            className="absolute inset-0 transition-all duration-500"
+            className="absolute inset-0 transition-opacity duration-500"
             style={{ background: `rgba(0,0,0,${dimOpacity})` }}
           />
         </motion.div>
@@ -129,8 +119,7 @@ export default function TimerPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="absolute top-6 right-8 z-20 text-xs font-medium text-white/45 tracking-widest uppercase"
-          data-testid="text-total-focused"
+          className="absolute top-6 right-8 z-20 text-xs font-medium text-white/40 tracking-widest uppercase"
         >
           {formatTotalTime(stats.totalFocusMinutes)}
         </motion.div>
@@ -158,8 +147,6 @@ export default function TimerPage() {
             onAdjust={handleAdjust}
           />
 
-          <TaskInput value={taskName} onChange={setTaskName} />
-
           <TimerControls
             isActive={timer.isActive}
             timeLeft={timer.timeLeft}
@@ -170,16 +157,6 @@ export default function TimerPage() {
             onSetDuration={() => setIsTimePickerOpen(true)}
           />
         </motion.div>
-
-        {/* Motivational quote */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="absolute bottom-24 text-white/28 text-xs font-light italic text-center max-w-sm px-4 pointer-events-none"
-        >
-          {quote}
-        </motion.p>
       </main>
 
       <LeftPanel isOpen={isLeftOpen} onClose={() => setIsLeftOpen(false)} />
@@ -210,6 +187,8 @@ export default function TimerPage() {
       <TimePickerPanel
         isOpen={isTimePickerOpen}
         currentDuration={timer.duration}
+        taskName={taskName}
+        onTaskNameChange={setTaskName}
         onConfirm={handleTimePickerConfirm}
         onClose={() => setIsTimePickerOpen(false)}
       />

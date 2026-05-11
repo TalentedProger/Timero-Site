@@ -13,16 +13,16 @@ interface BottomDockProps {
 }
 
 const LANGUAGES = [
-  { code: "en", label: "English", native: "English" },
-  { code: "ru", label: "Russian", native: "Русский" },
-  { code: "es", label: "Spanish", native: "Español" },
-  { code: "fr", label: "French", native: "Français" },
-  { code: "de", label: "German", native: "Deutsch" },
-  { code: "zh", label: "Chinese", native: "中文" },
-  { code: "ja", label: "Japanese", native: "日本語" },
-  { code: "pt", label: "Portuguese", native: "Português" },
-  { code: "ko", label: "Korean", native: "한국어" },
-  { code: "ar", label: "Arabic", native: "العربية" },
+  { code: "en", native: "English" },
+  { code: "ru", native: "Русский" },
+  { code: "es", native: "Español" },
+  { code: "fr", native: "Français" },
+  { code: "de", native: "Deutsch" },
+  { code: "zh", native: "中文" },
+  { code: "ja", native: "日本語" },
+  { code: "pt", native: "Português" },
+  { code: "ko", native: "한국어" },
+  { code: "ar", native: "العربية" },
 ];
 
 export function BottomDock({
@@ -51,9 +51,9 @@ export function BottomDock({
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
       <div
-        className="rounded-full px-4 py-3 flex items-center gap-5 border border-white/12"
+        className="rounded-full px-4 py-3 flex items-center gap-5 border border-white/10"
         style={{
-          background: "rgba(10,10,20,0.55)",
+          background: "rgba(10,10,20,0.58)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           boxShadow: "0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
@@ -62,7 +62,6 @@ export function BottomDock({
         {/* Appearance */}
         <button
           onClick={onToggleLeft}
-          data-testid="dock-appearance"
           className={cn(
             "p-2 rounded-full transition-all duration-200 hover:bg-white/10",
             isLeftOpen ? "text-white bg-white/15" : "text-white/55"
@@ -71,19 +70,17 @@ export function BottomDock({
           <Palette className="w-5 h-5" />
         </button>
 
-        {/* Minimal mode */}
+        {/* Minimal */}
         <button
           onClick={onToggleMinimal}
-          data-testid="dock-minimal"
           className="p-2 rounded-full transition-all duration-200 hover:bg-white/10 text-white/55 hover:text-white"
         >
           <Maximize2 className="w-5 h-5" />
         </button>
 
-        {/* Stats / History */}
+        {/* Stats */}
         <button
           onClick={onToggleRight}
-          data-testid="dock-stats"
           className={cn(
             "p-2 rounded-full transition-all duration-200 hover:bg-white/10",
             isRightOpen ? "text-white bg-white/15" : "text-white/55"
@@ -92,21 +89,19 @@ export function BottomDock({
           <BarChart2 className="w-5 h-5" />
         </button>
 
-        {/* Divider */}
         <div className="w-px h-5 bg-white/10" />
 
-        {/* Language selector */}
+        {/* Language */}
         <div ref={langRef} className="relative">
           <button
             onClick={() => setLangOpen((v) => !v)}
-            data-testid="dock-language"
             className={cn(
-              "p-2 rounded-full transition-all duration-200 hover:bg-white/10 flex items-center gap-1.5",
+              "px-2.5 py-1.5 rounded-full transition-all duration-200 hover:bg-white/10 flex items-center gap-1.5",
               langOpen ? "text-white bg-white/15" : "text-white/55"
             )}
           >
-            <Globe className="w-5 h-5" />
-            <span className="text-xs font-medium tracking-wide uppercase">
+            <Globe className="w-4 h-4" />
+            <span className="text-[11px] font-semibold tracking-widest uppercase">
               {currentLang.code}
             </span>
           </button>
@@ -114,20 +109,20 @@ export function BottomDock({
           <AnimatePresence>
             {langOpen && (
               <motion.div
-                key="lang-dropdown"
-                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                key="lang-menu"
+                initial={{ opacity: 0, y: 10, scale: 0.94 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                transition={{ duration: 0.15 }}
-                className="absolute bottom-14 left-1/2 -translate-x-1/2 w-48 rounded-2xl border border-white/10 overflow-hidden"
+                exit={{ opacity: 0, y: 10, scale: 0.94 }}
+                transition={{ duration: 0.16, ease: "easeOut" }}
+                className="absolute bottom-14 left-1/2 -translate-x-1/2 w-44 rounded-2xl border border-white/10 overflow-hidden"
                 style={{
-                  background: "rgba(10,10,22,0.92)",
-                  backdropFilter: "blur(32px)",
-                  WebkitBackdropFilter: "blur(32px)",
-                  boxShadow: "0 16px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)",
+                  background: "rgba(10,10,22,0.94)",
+                  backdropFilter: "blur(40px)",
+                  WebkitBackdropFilter: "blur(40px)",
+                  boxShadow: "0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07)",
                 }}
               >
-                <div className="p-1.5">
+                <div className="p-1.5 space-y-0.5">
                   {LANGUAGES.map((lang) => {
                     const isSelected = settings.language === lang.code;
                     return (
@@ -137,16 +132,20 @@ export function BottomDock({
                           setSettings({ language: lang.code });
                           setLangOpen(false);
                         }}
-                        data-testid={`lang-${lang.code}`}
                         className={cn(
-                          "w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-all",
+                          "w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-all duration-150",
                           isSelected
                             ? "bg-white/10 text-white"
-                            : "text-white/55 hover:bg-white/6 hover:text-white/80"
+                            : "text-white/50 hover:bg-white/6 hover:text-white/80"
                         )}
                       >
                         <span>{lang.native}</span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-violet-400" />}
+                        {isSelected && (
+                          <Check
+                            className="w-3.5 h-3.5 shrink-0"
+                            style={{ color: settings.accentColor }}
+                          />
+                        )}
                       </button>
                     );
                   })}

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/hooks/useSettings";
 
 interface SessionPresetsProps {
   onSelectPreset: (durationSeconds: number) => void;
@@ -16,6 +17,9 @@ const PRESETS = [
 ];
 
 export function SessionPresets({ onSelectPreset, activeDuration }: SessionPresetsProps) {
+  const { settings } = useSettings();
+  const accent = settings.accentColor;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -8 }}
@@ -35,16 +39,14 @@ export function SessionPresets({ onSelectPreset, activeDuration }: SessionPreset
             data-testid={`preset-${preset.label}`}
             className={cn(
               "relative px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300",
-              isActive
-                ? "text-white"
-                : "text-white/50 hover:text-white/80"
+              isActive ? "text-white" : "text-white/50 hover:text-white/80"
             )}
             style={
               isActive
                 ? {
-                    background: "rgba(139,92,246,0.25)",
-                    border: "1px solid rgba(139,92,246,0.5)",
-                    boxShadow: "0 0 18px rgba(139,92,246,0.25), inset 0 1px 0 rgba(255,255,255,0.1)",
+                    background: `${accent}28`,
+                    border: `1px solid ${accent}66`,
+                    boxShadow: `0 0 16px ${accent}30, inset 0 1px 0 rgba(255,255,255,0.08)`,
                   }
                 : {
                     background: "rgba(255,255,255,0.05)",

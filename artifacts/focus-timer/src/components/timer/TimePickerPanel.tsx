@@ -3,11 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, Plus, Minus, Clock } from "lucide-react";
 import { useHistory } from "@/hooks/useHistory";
 import { useSettings } from "@/hooks/useSettings";
+import { getT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface TimePickerPanelProps {
   isOpen: boolean;
   currentDuration: number;
+  taskName: string;
+  onTaskNameChange: (name: string) => void;
   onConfirm: (seconds: number) => void;
   onClose: () => void;
 }
@@ -24,12 +27,6 @@ const PRESET_TEMPLATES = [
   { label: "Workout", seconds: 30 * 60 },
 ];
 
-const QUICK_ADDS = [
-  { label: "+5m", delta: 5 * 60 },
-  { label: "+15m", delta: 15 * 60 },
-  { label: "+30m", delta: 30 * 60 },
-];
-
 function formatDuration(totalSeconds: number): string {
   const h = Math.floor(totalSeconds / 3600);
   const m = Math.floor((totalSeconds % 3600) / 60);
@@ -43,25 +40,23 @@ function WheelPicker({
   max,
   onChange,
   label,
+  accent,
 }: {
   value: number;
   max: number;
   onChange: (v: number) => void;
   label: string;
+  accent: string;
 }) {
-  const { settings } = useSettings();
-  const accent = settings.accentColor;
-
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const items = Array.from({ length: max + 1 }, (_, i) => i);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
     el.scrollTop = (PADDING + value) * ITEM_H;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -77,8 +72,7 @@ function WheelPicker({
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       const raw = Math.round(el.scrollTop / ITEM_H) - PADDING;
-      const clamped = Math.max(0, Math.min(max, raw));
-      onChange(clamped);
+      onChange(Math.max(0, Math.min(max, raw)));
       isScrolling.current = false;
     }, 80);
   }, [max, onChange]);
@@ -87,10 +81,13 @@ function WheelPicker({
     <div className="flex flex-col items-center gap-2">
       <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{label}</span>
       <div className="relative" style={{ height: VISIBLE * ITEM_H, width: 88 }}>
+        {/* Fade top */}
         <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none rounded-t-xl" />
+        {/* Fade bottom */}
         <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none rounded-b-xl" />
+        {/* Selection highlight */}
         <div
-          className="absolute inset-x-0 z-20 pointer-events-none rounded-lg"
+          className="absolute inset-x-2 z-20 pointer-events-none rounded-xl"
           style={{
             top: PADDING * ITEM_H,
             height: ITEM_H,
@@ -107,22 +104,19 @@ function WheelPicker({
           {Array(PADDING).fill(null).map((_, i) => (
             <div key={`pt${i}`} style={{ height: ITEM_H, scrollSnapAlign: "center" }} />
           ))}
-          {items.map((item) => {
+          {Array.from({ length: max + 1 }, (_, i) => i).map((item) => {
             const isSelected = item === value;
             return (
               <div
                 key={item}
                 onClick={() => {
                   onChange(item);
-                  const el = containerRef.current;
-                  if (el) el.scrollTo({ top: (PADDING + item) * ITEM_H, behavior: "smooth" });
+                  containerRef.current?.scrollTo({ top: (PADDING + item) * ITEM_H, behavior: "smooth" });
                 }}
                 style={{ height: ITEM_H, scrollSnapAlign: "center" }}
                 className={cn(
                   "flex items-center justify-center cursor-pointer transition-all duration-150 select-none tabular-nums font-mono font-thin",
-                  isSelected
-                    ? "text-white text-4xl"
-                    : "text-white/22 text-2xl hover:text-white/40"
+                  isSelected ? "text-white text-4xl" : "text-white/22 text-2xl hover:text-white/40"
                 )}
               >
                 {item.toString().padStart(2, "0")}
@@ -138,10 +132,18 @@ function WheelPicker({
   );
 }
 
-export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }: TimePickerPanelProps) {
+export function TimePickerPanel({
+  isOpen,
+  currentDuration,
+  taskName,
+  onTaskNameChange,
+  onConfirm,
+  onClose,
+}: TimePickerPanelProps) {
   const { history } = useHistory();
   const { settings } = useSettings();
   const accent = settings.accentColor;
+  const t = getT(settings.language);
 
   const [hours, setHours] = useState(Math.floor(currentDuration / 3600));
   const [minutes, setMinutes] = useState(() => {
@@ -169,7 +171,6 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
     setMinutes(Math.floor((seconds % 3600) / 60));
   };
 
-  // Unique recent durations from history
   const recentTimers = Array.from(
     new Map(
       history
@@ -187,6 +188,12 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
     onClose();
   };
 
+  const QUICK_ADDS = [
+    { label: "+5m", delta: 5 * 60 },
+    { label: "+15m", delta: 15 * 60 },
+    { label: "+30m", delta: 30 * 60 },
+  ];
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -198,64 +205,79 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
             exit={{ opacity: 0 }}
             onClick={onClose}
             className="fixed inset-0 z-40"
-            style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)" }}
+            style={{ background: "rgba(0,0,0,0.3)", backdropFilter: "blur(4px)" }}
           />
           <motion.div
             key="tp-panel"
-            initial={{ opacity: 0, scale: 0.93, y: 16 }}
+            initial={{ opacity: 0, scale: 0.94, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.93, y: 16 }}
-            transition={{ type: "spring", damping: 28, stiffness: 320 }}
-            className="fixed z-50 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 top-1/2 -translate-y-1/2 w-full sm:w-[440px]"
+            exit={{ opacity: 0, scale: 0.94, y: 20 }}
+            transition={{ type: "spring", damping: 30, stiffness: 340 }}
+            className="fixed z-50 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 top-1/2 -translate-y-1/2 w-full sm:w-[420px]"
           >
             <div
               className="rounded-3xl border border-white/10 overflow-hidden"
               style={{
                 background: "rgba(8,8,20,0.72)",
-                backdropFilter: "blur(48px)",
-                WebkitBackdropFilter: "blur(48px)",
+                backdropFilter: "blur(52px)",
+                WebkitBackdropFilter: "blur(52px)",
                 boxShadow: "0 32px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07)",
               }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-6 pt-5 pb-1">
-                <div className="flex items-center gap-2 text-white/45">
+              <div className="flex items-center justify-between px-5 pt-5 pb-3">
+                <div className="flex items-center gap-2 text-white/40">
                   <Clock className="w-4 h-4" />
-                  <span className="text-sm font-medium tracking-wide">Set Duration</span>
+                  <span className="text-sm font-medium tracking-wide">{t.setDuration}</span>
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-full hover:bg-white/8 transition-colors text-white/40 hover:text-white"
+                  className="p-1.5 rounded-full hover:bg-white/8 transition-colors text-white/35 hover:text-white"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
+              {/* Task name input */}
+              <div className="px-5 pb-4">
+                <input
+                  type="text"
+                  value={taskName}
+                  onChange={(e) => onTaskNameChange(e.target.value)}
+                  placeholder={t.taskPlaceholder}
+                  maxLength={80}
+                  className="w-full bg-transparent text-white/70 placeholder-white/25 text-sm outline-none border-b border-white/10 focus:border-white/25 pb-2 transition-colors duration-200"
+                  style={{ caretColor: accent }}
+                />
+              </div>
+
+              <div className="h-px bg-white/6" />
+
               {/* Wheels */}
               <div className="flex items-center justify-center gap-4 px-6 py-3">
-                <WheelPicker value={hours} max={23} onChange={setHours} label="Hours" />
-                <div className="text-4xl font-thin text-white/30 pb-4 select-none">:</div>
-                <WheelPicker value={minutes} max={59} onChange={setMinutes} label="Minutes" />
+                <WheelPicker value={hours} max={23} onChange={setHours} label={t.hours} accent={accent} />
+                <div className="text-4xl font-thin text-white/25 pb-4 select-none">:</div>
+                <WheelPicker value={minutes} max={59} onChange={setMinutes} label={t.minutes} accent={accent} />
               </div>
 
               {/* Total label */}
               <div className="text-center pb-3">
-                <span className="text-xs font-medium" style={{ color: `${accent}99` }}>
+                <span className="text-xs font-medium" style={{ color: `${accent}bb` }}>
                   {formatDuration(totalSeconds)}
                 </span>
               </div>
 
-              <div className="h-px bg-white/6 mx-6" />
+              <div className="h-px bg-white/6 mx-5" />
 
               {/* Quick add */}
-              <div className="px-6 py-4 space-y-2.5">
-                <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Quick add</p>
+              <div className="px-5 py-3.5 space-y-2">
+                <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.quickAdd}</p>
                 <div className="flex gap-2">
                   {QUICK_ADDS.map((q) => (
                     <button
                       key={q.label}
                       onClick={() => handleQuickAdd(q.delta)}
-                      className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-white/8 bg-white/4 hover:bg-white/9 hover:border-white/14 transition-all text-sm text-white/60 hover:text-white"
+                      className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-white/8 bg-white/4 hover:bg-white/8 hover:border-white/14 transition-all text-sm text-white/55 hover:text-white"
                     >
                       <Plus className="w-3 h-3" />
                       {q.label.replace("+", "")}
@@ -263,7 +285,7 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
                   ))}
                   <button
                     onClick={() => handleQuickAdd(-Math.floor(totalSeconds / 2))}
-                    className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-white/8 bg-white/4 hover:bg-white/9 hover:border-white/14 transition-all text-sm text-white/60 hover:text-white"
+                    className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-white/8 bg-white/4 hover:bg-white/8 hover:border-white/14 transition-all text-sm text-white/55 hover:text-white"
                   >
                     <Minus className="w-3 h-3" />
                     Half
@@ -271,11 +293,11 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
                 </div>
               </div>
 
-              <div className="h-px bg-white/6 mx-6" />
+              <div className="h-px bg-white/6 mx-5" />
 
               {/* Presets */}
-              <div className="px-6 py-4 space-y-2.5">
-                <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Presets</p>
+              <div className="px-5 py-3.5 space-y-2">
+                <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
                 <div className="flex flex-wrap gap-2">
                   {PRESET_TEMPLATES.map((p) => {
                     const isSelected = totalSeconds === p.seconds;
@@ -283,20 +305,19 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
                       <button
                         key={p.label}
                         onClick={() => handlePreset(p.seconds)}
-                        className={cn(
-                          "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
-                          isSelected
-                            ? "border text-white/90"
-                            : "border border-white/8 bg-white/4 text-white/50 hover:text-white/75 hover:border-white/18"
-                        )}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
                         style={
                           isSelected
                             ? {
                                 background: `${accent}22`,
-                                borderColor: `${accent}55`,
+                                border: `1px solid ${accent}55`,
                                 color: "rgba(255,255,255,0.9)",
                               }
-                            : undefined
+                            : {
+                                background: "rgba(255,255,255,0.04)",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                color: "rgba(255,255,255,0.5)",
+                              }
                         }
                       >
                         {p.label}
@@ -310,9 +331,9 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
               {/* Recent */}
               {recentTimers.length > 0 && (
                 <>
-                  <div className="h-px bg-white/6 mx-6" />
-                  <div className="px-6 py-4 space-y-2.5">
-                    <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Recent</p>
+                  <div className="h-px bg-white/6 mx-5" />
+                  <div className="px-5 py-3.5 space-y-2">
+                    <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.recent}</p>
                     <div className="flex flex-wrap gap-2">
                       {recentTimers.map((secs) => (
                         <button
@@ -329,7 +350,7 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
               )}
 
               {/* Confirm */}
-              <div className="px-6 pb-6 pt-2">
+              <div className="px-5 pb-5 pt-2">
                 <button
                   onClick={handleConfirm}
                   disabled={totalSeconds < 60}
@@ -348,7 +369,7 @@ export function TimePickerPanel({ isOpen, currentDuration, onConfirm, onClose }:
                   }
                 >
                   <Check className="w-4 h-4" />
-                  Set {formatDuration(totalSeconds)}
+                  {t.confirm} {formatDuration(totalSeconds)}
                 </button>
               </div>
             </div>

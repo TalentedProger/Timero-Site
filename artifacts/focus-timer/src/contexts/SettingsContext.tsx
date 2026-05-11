@@ -16,6 +16,9 @@ export interface Settings {
   };
   minimalMode: boolean;
   timeFormat: "12h" | "24h";
+  accentColor: string;
+  backgroundDim: number;
+  language: string;
 }
 
 const defaultSettings: Settings = {
@@ -28,6 +31,9 @@ const defaultSettings: Settings = {
   notificationTriggers: { "25": false, "50": false, "75": false, "100": true },
   minimalMode: false,
   timeFormat: "24h",
+  accentColor: "#8b5cf6",
+  backgroundDim: 38,
+  language: "en",
 };
 
 interface SettingsContextValue {

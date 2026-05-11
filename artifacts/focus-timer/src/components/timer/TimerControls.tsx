@@ -1,8 +1,7 @@
-import React from "react";
 import { motion } from "framer-motion";
-import { Play, Pause, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Play, Pause, RotateCcw, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/hooks/useSettings";
 
 interface TimerControlsProps {
   isActive: boolean;
@@ -11,38 +10,69 @@ interface TimerControlsProps {
   onStart: () => void;
   onPause: () => void;
   onReset: () => void;
+  onSetDuration: () => void;
 }
 
-export function TimerControls({ isActive, timeLeft, duration, onStart, onPause, onReset }: TimerControlsProps) {
+export function TimerControls({
+  isActive,
+  timeLeft,
+  duration,
+  onStart,
+  onPause,
+  onReset,
+  onSetDuration,
+}: TimerControlsProps) {
+  const { settings } = useSettings();
+  const accent = settings.accentColor;
+
+  const isAtStart = timeLeft === duration && !isActive;
+
   return (
-    <div className="flex items-center justify-center gap-6 mt-8 z-10">
-      <Button
-        variant="ghost"
-        size="icon"
+    <div className="flex items-center justify-center gap-5 mt-8 z-10">
+      {/* Reset */}
+      <motion.button
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
         onClick={onReset}
-        disabled={timeLeft === duration && !isActive}
+        disabled={isAtStart}
+        data-testid="button-reset"
         className={cn(
-          "w-14 h-14 rounded-full glass-panel hover:bg-white/20 transition-all",
-          (timeLeft === duration && !isActive) && "opacity-50 cursor-not-allowed"
+          "w-14 h-14 rounded-full flex items-center justify-center border border-white/10 bg-white/5 backdrop-blur-sm transition-all hover:bg-white/12 hover:border-white/20",
+          isAtStart && "opacity-40 cursor-not-allowed pointer-events-none"
         )}
       >
-        <RotateCcw className="w-6 h-6 text-white/80" />
-      </Button>
+        <RotateCcw className="w-5 h-5 text-white/80" />
+      </motion.button>
 
-      <Button
-        variant="default"
-        size="icon"
+      {/* Play / Pause — large accent button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={isActive ? onPause : onStart}
-        className={cn(
-          "w-20 h-20 rounded-full shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:shadow-[0_0_45px_rgba(139,92,246,0.6)] transition-all bg-primary hover:bg-primary/90"
-        )}
+        data-testid="button-play-pause"
+        className="w-20 h-20 rounded-full flex items-center justify-center transition-all"
+        style={{
+          background: accent,
+          boxShadow: `0 0 30px ${accent}66, 0 0 60px ${accent}22`,
+        }}
       >
         {isActive ? (
           <Pause className="w-8 h-8 text-white fill-white" />
         ) : (
           <Play className="w-8 h-8 text-white fill-white ml-1" />
         )}
-      </Button>
+      </motion.button>
+
+      {/* Set Duration */}
+      <motion.button
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
+        onClick={onSetDuration}
+        data-testid="button-set-duration"
+        className="w-14 h-14 rounded-full flex items-center justify-center border border-white/10 bg-white/5 backdrop-blur-sm transition-all hover:bg-white/12 hover:border-white/20"
+      >
+        <Timer className="w-5 h-5 text-white/80" />
+      </motion.button>
     </div>
   );
 }

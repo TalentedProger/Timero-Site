@@ -2,6 +2,7 @@ import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, Edit2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/hooks/useSettings";
 
 interface TimerDisplayProps {
   timeLeft: number;
@@ -20,33 +21,62 @@ export function TimerDisplay({
   onEditClick,
   onAdjust,
 }: TimerDisplayProps) {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+  const { settings } = useSettings();
+  const accent = settings.accentColor;
+
+  const totalHours = Math.floor(timeLeft / 3600);
+  const totalMins = Math.floor((timeLeft % 3600) / 60);
+  const secs = timeLeft % 60;
+
+  // Show hours format when the session duration is >= 1 hour
+  const showHours = duration >= 3600;
+  const formattedTime = showHours
+    ? `${totalHours}:${totalMins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+    : `${totalMins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+
+  // Dynamic font size based on character count
+  const charCount = formattedTime.length;
+  const fontClass =
+    charCount <= 5
+      ? "text-[5.5rem] sm:text-[6.5rem]"
+      : charCount <= 7
+      ? "text-[3.8rem] sm:text-[5rem]"
+      : "text-[3rem] sm:text-[3.8rem]";
+
+  // Ring dimensions — slightly larger when showing hours to give more breathing room
+  const ringR = showHours ? 128 : 140;
+  const ringSize = showHours ? 280 : 300;
 
   const progress = duration > 0 ? ((duration - timeLeft) / duration) * 100 : 0;
-  const circumference = 2 * Math.PI * 140;
+  const circumference = 2 * Math.PI * ringR;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-  // urgency glow — ramps up in last 20%
+  // Urgency glow when < 20% remaining
   const urgency = progress > 80 ? (progress - 80) / 20 : 0;
-  const glowColor = urgency > 0
-    ? `rgba(239,68,68,${0.25 + urgency * 0.35})`
-    : "rgba(139,92,246,0.3)";
+  const strokeColor =
+    urgency > 0 ? `rgba(239,68,68,${0.7 + urgency * 0.3})` : accent;
+  const glowColor =
+    urgency > 0
+      ? `rgba(239,68,68,${0.2 + urgency * 0.35})`
+      : `${accent}55`;
 
-  // Hold-to-adjust logic
+  // Hold-to-adjust
   const holdRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const holdCountRef = useRef(0);
 
-  const startHold = useCallback((delta: number) => {
-    if (isActive) return;
-    holdCountRef.current = 0;
-    onAdjust(delta);
-    holdRef.current = setInterval(() => {
-      holdCountRef.current += 1;
-      const speed = holdCountRef.current > 12 ? 5 * 60 : 60;
-      onAdjust(delta > 0 ? speed : -speed);
-    }, 150);
-  }, [isActive, onAdjust]);
+  const startHold = useCallback(
+    (delta: number) => {
+      if (isActive) return;
+      holdCountRef.current = 0;
+      onAdjust(delta);
+      holdRef.current = setInterval(() => {
+        holdCountRef.current += 1;
+        const speed = holdCountRef.current > 12 ? 5 * 60 : 60;
+        onAdjust(delta > 0 ? speed : -speed);
+      }, 150);
+    },
+    [isActive, onAdjust]
+  );
 
   const stopHold = useCallback(() => {
     if (holdRef.current) {
@@ -55,13 +85,11 @@ export function TimerDisplay({
     }
   }, []);
 
-  // Scroll to adjust
   const handleWheel = useCallback(
     (e: React.WheelEvent) => {
       if (isActive) return;
       e.preventDefault();
-      const delta = e.deltaY > 0 ? -60 : 60;
-      onAdjust(delta);
+      onAdjust(e.deltaY > 0 ? -60 : 60);
     },
     [isActive, onAdjust]
   );
@@ -82,9 +110,14 @@ export function TimerDisplay({
         }
       : {};
 
+  const containerSize = showHours ? "w-72 h-72 sm:w-80 sm:h-80" : "w-72 h-72 sm:w-80 sm:h-80";
+  const viewBox = `0 0 ${ringSize} ${ringSize}`;
+  const cx = ringSize / 2;
+  const cy = ringSize / 2;
+
   return (
     <div className="flex items-center gap-4 sm:gap-8">
-      {/* Minus button */}
+      {/* Minus */}
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.93 }}
@@ -105,50 +138,46 @@ export function TimerDisplay({
         <Minus className="w-4 h-4" />
       </motion.button>
 
-      {/* Ring + Digits */}
-      <div className="relative flex items-center justify-center w-72 h-72 sm:w-80 sm:h-80">
+      {/* Ring + digits */}
+      <div className={cn("relative flex items-center justify-center", containerSize)}>
         <svg
           className="absolute w-full h-full -rotate-90 pointer-events-none"
-          viewBox="0 0 320 320"
-          style={{ filter: `drop-shadow(0 0 24px ${glowColor})` }}
+          viewBox={viewBox}
+          style={{ filter: `drop-shadow(0 0 20px ${glowColor})` }}
         >
           {/* Track */}
           <circle
-            cx="160" cy="160" r="140"
+            cx={cx} cy={cy} r={ringR}
             fill="none"
             strokeWidth="3"
-            className="stroke-white/8"
+            stroke="rgba(255,255,255,0.08)"
           />
           {/* Progress */}
           <motion.circle
-            cx="160" cy="160" r="140"
+            cx={cx} cy={cy} r={ringR}
             fill="none"
             strokeWidth="3"
             strokeLinecap="round"
             strokeDasharray={circumference}
             animate={{ strokeDashoffset }}
             transition={{ duration: 0.6, ease: "linear" }}
-            style={{
-              stroke: urgency > 0
-                ? `rgba(239,68,68,${0.7 + urgency * 0.3})`
-                : "rgba(139,92,246,0.85)",
-            }}
+            style={{ stroke: strokeColor }}
           />
-          {/* Dot at progress head */}
+          {/* Head dot */}
           {progress > 0 && progress < 100 && (
             <motion.circle
               r="4"
-              fill={urgency > 0 ? "rgb(239,68,68)" : "rgb(167,139,250)"}
+              style={{ fill: urgency > 0 ? "rgb(239,68,68)" : accent }}
               animate={{
-                cx: 160 + 140 * Math.sin((progress / 100) * 2 * Math.PI),
-                cy: 160 - 140 * Math.cos((progress / 100) * 2 * Math.PI),
+                cx: cx + ringR * Math.sin((progress / 100) * 2 * Math.PI),
+                cy: cy - ringR * Math.cos((progress / 100) * 2 * Math.PI),
               }}
               transition={{ duration: 0.6, ease: "linear" }}
             />
           )}
         </svg>
 
-        {/* Clickable digit area */}
+        {/* Digits */}
         <motion.div
           {...breatheVariants}
           className="relative z-10 flex flex-col items-center group cursor-pointer"
@@ -157,17 +186,15 @@ export function TimerDisplay({
           data-testid="timer-display-digits"
           title={isActive ? undefined : "Click to edit duration"}
         >
-          <motion.span
-            key={timeLeft}
+          <span
             className={cn(
-              "font-mono font-thin tabular-nums tracking-tighter drop-shadow-md select-none",
-              "text-[5.5rem] sm:text-[6.5rem] leading-none text-white"
+              "font-mono font-thin tabular-nums tracking-tighter drop-shadow-md select-none leading-none text-white transition-all duration-300",
+              fontClass
             )}
           >
-            {minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}
-          </motion.span>
+            {formattedTime}
+          </span>
 
-          {/* "Click to edit" hint */}
           {!isActive && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -181,7 +208,7 @@ export function TimerDisplay({
         </motion.div>
       </div>
 
-      {/* Plus button */}
+      {/* Plus */}
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.93 }}

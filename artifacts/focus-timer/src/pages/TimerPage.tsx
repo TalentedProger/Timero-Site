@@ -17,7 +17,7 @@ import { backgrounds } from "@/lib/backgrounds";
 
 const QUOTES = [
   "Focus is the art of knowing what to ignore.",
-  "One task at a time. That's the whole secret.",
+  "One task at a time. That is the whole secret.",
   "Deep work is the superpower of the 21st century.",
   "Energy flows where attention goes.",
   "The quality of your work is shaped by the quality of your focus.",
@@ -41,7 +41,8 @@ export default function TimerPage() {
     backgrounds.find((b) => b.id === settings.selectedBackground)?.url ??
     backgrounds[0].url;
 
-  // Handle timer completion → save session
+  const dimOpacity = settings.backgroundDim / 100;
+
   useEffect(() => {
     if (timer.timeLeft === 0 && timer.duration > 0 && !timer.isActive) {
       addSession({
@@ -97,7 +98,8 @@ export default function TimerPage() {
   const formatTotalTime = (minutes: number) => {
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
-    if (h > 0) return `${h}h ${m}m focused`;
+    if (h > 0 && m > 0) return `${h}h ${m}m focused`;
+    if (h > 0) return `${h}h focused`;
     return `${m}m focused`;
   };
 
@@ -114,17 +116,20 @@ export default function TimerPage() {
           className="absolute inset-0 z-0"
         >
           <img src={bgImage} alt="background" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/38" />
+          <div
+            className="absolute inset-0 transition-all duration-500"
+            style={{ background: `rgba(0,0,0,${dimOpacity})` }}
+          />
         </motion.div>
       </AnimatePresence>
 
-      {/* Top-right stats */}
+      {/* Top-right — total focused today */}
       {stats.totalFocusMinutes > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="absolute top-6 right-8 z-20 text-xs font-medium text-white/50 tracking-widest uppercase"
+          className="absolute top-6 right-8 z-20 text-xs font-medium text-white/45 tracking-widest uppercase"
           data-testid="text-total-focused"
         >
           {formatTotalTime(stats.totalFocusMinutes)}
@@ -132,20 +137,18 @@ export default function TimerPage() {
       )}
 
       {/* Main stage */}
-      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4 gap-0">
+      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
           className="flex flex-col items-center w-full max-w-3xl gap-6"
         >
-          {/* Session presets */}
           <SessionPresets
             activeDuration={timer.duration}
             onSelectPreset={handlePresetSelect}
           />
 
-          {/* Timer with +/– */}
           <TimerDisplay
             timeLeft={timer.timeLeft}
             duration={timer.duration}
@@ -155,10 +158,8 @@ export default function TimerPage() {
             onAdjust={handleAdjust}
           />
 
-          {/* Task input */}
           <TaskInput value={taskName} onChange={setTaskName} />
 
-          {/* Controls */}
           <TimerControls
             isActive={timer.isActive}
             timeLeft={timer.timeLeft}
@@ -166,21 +167,21 @@ export default function TimerPage() {
             onStart={timer.start}
             onPause={handlePause}
             onReset={handleReset}
+            onSetDuration={() => setIsTimePickerOpen(true)}
           />
         </motion.div>
 
-        {/* Quote */}
+        {/* Motivational quote */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 1 }}
-          className="absolute bottom-24 text-white/30 text-xs font-light italic text-center max-w-sm px-4 pointer-events-none"
+          className="absolute bottom-24 text-white/28 text-xs font-light italic text-center max-w-sm px-4 pointer-events-none"
         >
           {quote}
         </motion.p>
       </main>
 
-      {/* Panels */}
       <LeftPanel isOpen={isLeftOpen} onClose={() => setIsLeftOpen(false)} />
       <RightPanel isOpen={isRightOpen} onClose={() => setIsRightOpen(false)} />
 
@@ -206,7 +207,6 @@ export default function TimerPage() {
         onToggleTimer={() => (timer.isActive ? handlePause() : timer.start())}
       />
 
-      {/* Time Picker */}
       <TimePickerPanel
         isOpen={isTimePickerOpen}
         currentDuration={timer.duration}

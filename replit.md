@@ -1,36 +1,50 @@
-# [Project name]
+# Focus Timer
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A premium, Apple-level focus timer web app — beautiful, calm, and intentional. Built for daily focused work sessions with glassmorphism UI, custom sounds, background galleries, session history, and statistics.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/focus-timer run dev` — run the focus timer app (port 24703)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000, not used by timer)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- React + Vite (focus-timer artifact at `/`)
+- TailwindCSS v4, Framer Motion, Recharts
+- Web Audio API (sound synthesis, no external audio files)
+- localStorage for all persistence (settings + history)
+- No backend required — fully frontend-only
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/focus-timer/src/pages/TimerPage.tsx` — main page
+- `artifacts/focus-timer/src/components/timer/` — TimerDisplay, TimerControls, SessionPresets, TaskInput
+- `artifacts/focus-timer/src/components/panels/` — LeftPanel, RightPanel, BottomDock, MinimalMode
+- `artifacts/focus-timer/src/hooks/` — useTimer, useSettings, useHistory, useSound
+- `artifacts/focus-timer/src/lib/` — sounds.ts (Web Audio), backgrounds.ts (Unsplash URLs), stats.ts
+- `attached_assets/` — reference screenshots used as built-in backgrounds
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- All data (settings, session history) stored in localStorage — no backend needed for the timer
+- Web Audio API used for all sound synthesis — no external audio files required
+- Glassmorphism panels slide in/out from left and right using Framer Motion AnimatePresence
+- Backgrounds served via direct Unsplash URLs + attached asset imports
+- Single-page app with wouter routing (only "/" route)
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Countdown timer with Focus (25m), Short Break (5m), Long Break (15m), and custom durations
+- Task name input for labeling each focus session
+- Left panel: background gallery, animation styles, sound selector + volume
+- Right panel: session history list + 7-day statistics bar chart
+- Bottom dock: minimal mode toggle, settings, notification controls
+- Intermediate notifications at 25%, 50%, 75%, and 100% completion
+- Minimal mode: fullscreen timer-only view, hides all UI elements
+- Web Audio API sounds: Bell, Chime, Gong, Rain, Birds, Sine
 
 ## User preferences
 
@@ -38,7 +52,10 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Google Fonts @import must be the FIRST line in index.css (before @import "tailwindcss")
+- All CSS --variable values in :root and .dark must be real HSL values (scaffold ships with "red" as placeholders)
+- Do not add a backend for the timer — everything is localStorage-based
+- Sound synthesis uses Web Audio API (AudioContext) — no external .mp3/.wav files
 
 ## Pointers
 

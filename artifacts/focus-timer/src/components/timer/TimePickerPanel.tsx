@@ -36,17 +36,9 @@ function formatDuration(totalSeconds: number): string {
 }
 
 function WheelPicker({
-  value,
-  max,
-  onChange,
-  label,
-  accent,
+  value, max, onChange, label, accent,
 }: {
-  value: number;
-  max: number;
-  onChange: (v: number) => void;
-  label: string;
-  accent: string;
+  value: number; max: number; onChange: (v: number) => void; label: string; accent: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
@@ -56,7 +48,7 @@ function WheelPicker({
     const el = containerRef.current;
     if (!el) return;
     el.scrollTop = (PADDING + value) * ITEM_H;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -81,19 +73,11 @@ function WheelPicker({
     <div className="flex flex-col items-center gap-2">
       <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{label}</span>
       <div className="relative" style={{ height: VISIBLE * ITEM_H, width: 88 }}>
-        {/* Fade top */}
-        <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none rounded-t-xl" />
-        {/* Fade bottom */}
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none rounded-b-xl" />
-        {/* Selection highlight */}
+        <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/40 to-transparent z-10 pointer-events-none rounded-t-xl" />
+        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/40 to-transparent z-10 pointer-events-none rounded-b-xl" />
         <div
           className="absolute inset-x-2 z-20 pointer-events-none rounded-xl"
-          style={{
-            top: PADDING * ITEM_H,
-            height: ITEM_H,
-            background: `${accent}14`,
-            border: `1px solid ${accent}30`,
-          }}
+          style={{ top: PADDING * ITEM_H, height: ITEM_H, background: `${accent}14`, border: `1px solid ${accent}30` }}
         />
         <div
           ref={containerRef}
@@ -105,7 +89,7 @@ function WheelPicker({
             <div key={`pt${i}`} style={{ height: ITEM_H, scrollSnapAlign: "center" }} />
           ))}
           {Array.from({ length: max + 1 }, (_, i) => i).map((item) => {
-            const isSelected = item === value;
+            const isSel = item === value;
             return (
               <div
                 key={item}
@@ -116,7 +100,7 @@ function WheelPicker({
                 style={{ height: ITEM_H, scrollSnapAlign: "center" }}
                 className={cn(
                   "flex items-center justify-center cursor-pointer transition-all duration-150 select-none tabular-nums font-mono font-thin",
-                  isSelected ? "text-white text-4xl" : "text-white/22 text-2xl hover:text-white/40"
+                  isSel ? "text-white text-4xl" : "text-white/20 text-2xl hover:text-white/40"
                 )}
               >
                 {item.toString().padStart(2, "0")}
@@ -132,14 +116,7 @@ function WheelPicker({
   );
 }
 
-export function TimePickerPanel({
-  isOpen,
-  currentDuration,
-  taskName,
-  onTaskNameChange,
-  onConfirm,
-  onClose,
-}: TimePickerPanelProps) {
+export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameChange, onConfirm, onClose }: TimePickerPanelProps) {
   const { history } = useHistory();
   const { settings } = useSettings();
   const accent = settings.accentColor;
@@ -175,21 +152,12 @@ export function TimePickerPanel({
     new Map(
       history
         .filter((s) => s.duration >= 60)
-        .map((s) => {
-          const secs = Math.round(s.duration / 60) * 60;
-          return [secs, secs];
-        })
+        .map((s) => { const secs = Math.round(s.duration / 60) * 60; return [secs, secs]; })
     ).values()
   ).slice(0, 5);
 
-  const handleConfirm = () => {
-    if (totalSeconds < 60) return;
-    onConfirm(totalSeconds);
-    onClose();
-  };
-
   const QUICK_ADDS = [
-    { label: "+5m", delta: 5 * 60 },
+    { label: "+5m",  delta: 5 * 60 },
     { label: "+15m", delta: 15 * 60 },
     { label: "+30m", delta: 30 * 60 },
   ];
@@ -205,123 +173,122 @@ export function TimePickerPanel({
             exit={{ opacity: 0 }}
             onClick={onClose}
             className="fixed inset-0 z-40"
-            style={{ background: "rgba(0,0,0,0.3)", backdropFilter: "blur(4px)" }}
+            style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(6px)" }}
           />
           <motion.div
             key="tp-panel"
-            initial={{ opacity: 0, scale: 0.94, y: 20 }}
+            initial={{ opacity: 0, scale: 0.93, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: 20 }}
+            exit={{ opacity: 0, scale: 0.93, y: 24 }}
             transition={{ type: "spring", damping: 30, stiffness: 340 }}
             className="fixed z-50 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 top-1/2 -translate-y-1/2 w-full sm:w-[420px]"
           >
+            {/* Main glass card */}
             <div
-              className="rounded-3xl border border-white/10 overflow-hidden"
+              className="rounded-3xl overflow-hidden"
               style={{
-                background: "rgba(8,8,20,0.72)",
-                backdropFilter: "blur(52px)",
-                WebkitBackdropFilter: "blur(52px)",
-                boxShadow: "0 32px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07)",
+                background: "linear-gradient(145deg, rgba(20,12,50,0.80) 0%, rgba(8,8,28,0.76) 100%)",
+                backdropFilter: "blur(56px)",
+                WebkitBackdropFilter: "blur(56px)",
+                border: "1px solid rgba(255,255,255,0.10)",
+                boxShadow: `0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04) inset, 0 0 80px ${accent}18`,
               }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 pt-5 pb-3">
-                <div className="flex items-center gap-2 text-white/40">
+              <div className="flex items-center justify-between px-5 pt-5 pb-4">
+                <div className="flex items-center gap-2" style={{ color: `${accent}aa` }}>
                   <Clock className="w-4 h-4" />
-                  <span className="text-sm font-medium tracking-wide">{t.setDuration}</span>
+                  <span className="text-sm font-semibold tracking-wide">{t.setDuration}</span>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="p-1.5 rounded-full hover:bg-white/8 transition-colors text-white/35 hover:text-white"
-                >
+                <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/8 transition-colors text-white/35 hover:text-white">
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* Task name input */}
-              <div className="px-5 pb-4">
-                <input
-                  type="text"
-                  value={taskName}
-                  onChange={(e) => onTaskNameChange(e.target.value)}
-                  placeholder={t.taskPlaceholder}
-                  maxLength={80}
-                  className="w-full bg-transparent text-white/70 placeholder-white/25 text-sm outline-none border-b border-white/10 focus:border-white/25 pb-2 transition-colors duration-200"
-                  style={{ caretColor: accent }}
-                />
+              {/* Task name — glass pill */}
+              <div className="px-5 pb-5">
+                <div
+                  className="flex items-center px-4 py-3.5 rounded-2xl transition-all"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.10)",
+                  }}
+                >
+                  <input
+                    type="text"
+                    value={taskName}
+                    onChange={(e) => onTaskNameChange(e.target.value)}
+                    placeholder={t.taskPlaceholder}
+                    maxLength={80}
+                    className="flex-1 bg-transparent text-white/80 placeholder-white/25 text-sm outline-none"
+                    style={{ caretColor: accent }}
+                  />
+                </div>
               </div>
-
-              <div className="h-px bg-white/6" />
 
               {/* Wheels */}
-              <div className="flex items-center justify-center gap-4 px-6 py-3">
-                <WheelPicker value={hours} max={23} onChange={setHours} label={t.hours} accent={accent} />
-                <div className="text-4xl font-thin text-white/25 pb-4 select-none">:</div>
-                <WheelPicker value={minutes} max={59} onChange={setMinutes} label={t.minutes} accent={accent} />
+              <div
+                className="mx-5 mb-4 rounded-2xl overflow-hidden"
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                }}
+              >
+                <div className="flex items-center justify-center gap-4 px-4 py-3">
+                  <WheelPicker value={hours} max={23} onChange={setHours} label={t.hours} accent={accent} />
+                  <div className="text-4xl font-thin text-white/20 pb-4 select-none">:</div>
+                  <WheelPicker value={minutes} max={59} onChange={setMinutes} label={t.minutes} accent={accent} />
+                </div>
+                {/* Total */}
+                <div className="text-center pb-3">
+                  <span className="text-xs font-semibold" style={{ color: `${accent}cc` }}>
+                    {formatDuration(totalSeconds)}
+                  </span>
+                </div>
               </div>
 
-              {/* Total label */}
-              <div className="text-center pb-3">
-                <span className="text-xs font-medium" style={{ color: `${accent}bb` }}>
-                  {formatDuration(totalSeconds)}
-                </span>
-              </div>
-
-              <div className="h-px bg-white/6 mx-5" />
-
-              {/* Quick add */}
-              <div className="px-5 py-3.5 space-y-2">
+              {/* Quick adds */}
+              <div className="px-5 pb-4 space-y-2">
                 <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.quickAdd}</p>
                 <div className="flex gap-2">
                   {QUICK_ADDS.map((q) => (
                     <button
                       key={q.label}
                       onClick={() => handleQuickAdd(q.delta)}
-                      className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-white/8 bg-white/4 hover:bg-white/8 hover:border-white/14 transition-all text-sm text-white/55 hover:text-white"
+                      className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl text-sm text-white/55 hover:text-white transition-all"
+                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
                     >
-                      <Plus className="w-3 h-3" />
-                      {q.label.replace("+", "")}
+                      <Plus className="w-3 h-3" />{q.label.replace("+", "")}
                     </button>
                   ))}
                   <button
                     onClick={() => handleQuickAdd(-Math.floor(totalSeconds / 2))}
-                    className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl border border-white/8 bg-white/4 hover:bg-white/8 hover:border-white/14 transition-all text-sm text-white/55 hover:text-white"
+                    className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl text-sm text-white/55 hover:text-white transition-all"
+                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
                   >
-                    <Minus className="w-3 h-3" />
-                    Half
+                    <Minus className="w-3 h-3" />Half
                   </button>
                 </div>
               </div>
 
-              <div className="h-px bg-white/6 mx-5" />
-
               {/* Presets */}
-              <div className="px-5 py-3.5 space-y-2">
+              <div className="px-5 pb-4 space-y-2">
                 <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
                 <div className="flex flex-wrap gap-2">
                   {PRESET_TEMPLATES.map((p) => {
-                    const isSelected = totalSeconds === p.seconds;
+                    const isSel = totalSeconds === p.seconds;
                     return (
                       <button
                         key={p.label}
                         onClick={() => handlePreset(p.seconds)}
                         className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
                         style={
-                          isSelected
-                            ? {
-                                background: `${accent}22`,
-                                border: `1px solid ${accent}55`,
-                                color: "rgba(255,255,255,0.9)",
-                              }
-                            : {
-                                background: "rgba(255,255,255,0.04)",
-                                border: "1px solid rgba(255,255,255,0.08)",
-                                color: "rgba(255,255,255,0.5)",
-                              }
+                          isSel
+                            ? { background: `${accent}22`, border: `1px solid ${accent}55`, color: "rgba(255,255,255,0.9)" }
+                            : { background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.45)" }
                         }
                       >
-                        {p.label}
-                        <span className="ml-1.5 opacity-50">{formatDuration(p.seconds)}</span>
+                        {p.label} <span className="opacity-50 ml-1">{formatDuration(p.seconds)}</span>
                       </button>
                     );
                   })}
@@ -330,43 +297,32 @@ export function TimePickerPanel({
 
               {/* Recent */}
               {recentTimers.length > 0 && (
-                <>
-                  <div className="h-px bg-white/6 mx-5" />
-                  <div className="px-5 py-3.5 space-y-2">
-                    <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.recent}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {recentTimers.map((secs) => (
-                        <button
-                          key={secs}
-                          onClick={() => handlePreset(secs)}
-                          className="px-3 py-1.5 rounded-full text-xs border border-white/8 bg-white/4 text-white/50 hover:text-white/75 hover:border-white/18 transition-all"
-                        >
-                          {formatDuration(secs)}
-                        </button>
-                      ))}
-                    </div>
+                <div className="px-5 pb-4 space-y-2">
+                  <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.recent}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {recentTimers.map((secs) => (
+                      <button
+                        key={secs}
+                        onClick={() => handlePreset(secs)}
+                        className="px-3 py-1.5 rounded-full text-xs text-white/45 hover:text-white/75 transition-all"
+                        style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+                      >
+                        {formatDuration(secs)}
+                      </button>
+                    ))}
                   </div>
-                </>
+                </div>
               )}
 
               {/* Confirm */}
-              <div className="px-5 pb-5 pt-2">
+              <div className="px-5 pb-5 pt-1">
                 <button
-                  onClick={handleConfirm}
+                  onClick={() => { if (totalSeconds >= 60) { onConfirm(totalSeconds); onClose(); } }}
                   disabled={totalSeconds < 60}
-                  className={cn(
-                    "w-full py-3.5 rounded-2xl text-sm font-semibold tracking-wide transition-all flex items-center justify-center gap-2",
-                    totalSeconds < 60 && "opacity-30 cursor-not-allowed"
-                  )}
-                  style={
-                    totalSeconds >= 60
-                      ? {
-                          background: accent,
-                          boxShadow: `0 0 24px ${accent}55`,
-                          color: "white",
-                        }
-                      : { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.3)" }
-                  }
+                  className={cn("w-full py-4 rounded-2xl text-sm font-semibold tracking-wide transition-all flex items-center justify-center gap-2", totalSeconds < 60 && "opacity-30 cursor-not-allowed")}
+                  style={totalSeconds >= 60
+                    ? { background: accent, boxShadow: `0 0 28px ${accent}55`, color: "white" }
+                    : { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.3)" }}
                 >
                   <Check className="w-4 h-4" />
                   {t.confirm} {formatDuration(totalSeconds)}

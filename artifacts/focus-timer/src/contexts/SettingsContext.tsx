@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 export interface Settings {
   selectedBackground: string;
+  customBackgroundUrl: string;
   animationStyle: "pulse" | "breathe" | "ripple" | "none";
   selectedSound: string;
   volume: number;
@@ -19,10 +20,12 @@ export interface Settings {
   accentColor: string;
   backgroundDim: number;
   language: string;
+  fontFamily: string;
 }
 
 const defaultSettings: Settings = {
   selectedBackground: "ocean",
+  customBackgroundUrl: "",
   animationStyle: "breathe",
   selectedSound: "bell",
   volume: 50,
@@ -34,6 +37,7 @@ const defaultSettings: Settings = {
   accentColor: "#8b5cf6",
   backgroundDim: 38,
   language: "en",
+  fontFamily: "inter",
 };
 
 interface SettingsContextValue {

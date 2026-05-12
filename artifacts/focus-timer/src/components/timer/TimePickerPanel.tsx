@@ -41,47 +41,100 @@ function WheelPicker({
   value: number; max: number; onChange: (v: number) => void; label: string; accent: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isScrolling = useRef(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // displayValue tracks what's VISUALLY centered right now (updates on every scroll frame)
+  const [displayValue, setDisplayValue] = useState(value);
+  const snapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const programmaticRef = useRef(false);
 
+  // On mount: jump instantly to the correct position
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
     el.scrollTop = (PADDING + value) * ITEM_H;
+    setDisplayValue(value);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // When parent changes value (preset click, etc.) scroll smoothly
   useEffect(() => {
     const el = containerRef.current;
-    if (!el || isScrolling.current) return;
-    el.scrollTo({ top: (PADDING + value) * ITEM_H, behavior: "smooth" });
+    if (!el) return;
+    const target = (PADDING + value) * ITEM_H;
+    if (Math.abs(el.scrollTop - target) < 2) return; // already there
+    programmaticRef.current = true;
+    el.scrollTo({ top: target, behavior: "smooth" });
+    setDisplayValue(value);
+    setTimeout(() => { programmaticRef.current = false; }, 400);
   }, [value]);
 
+  // On every scroll frame: read which item is centered → update displayValue immediately
   const handleScroll = useCallback(() => {
     const el = containerRef.current;
     if (!el) return;
-    isScrolling.current = true;
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      const raw = Math.round(el.scrollTop / ITEM_H) - PADDING;
-      onChange(Math.max(0, Math.min(max, raw)));
-      isScrolling.current = false;
-    }, 80);
+
+    const raw = el.scrollTop / ITEM_H - PADDING;
+    const nearest = Math.max(0, Math.min(max, Math.round(raw)));
+    setDisplayValue(nearest);
+
+    // Debounce: after user stops, snap perfectly and commit to parent
+    if (snapTimerRef.current) clearTimeout(snapTimerRef.current);
+    snapTimerRef.current = setTimeout(() => {
+      const finalRaw = Math.round(el.scrollTop / ITEM_H) - PADDING;
+      const finalVal = Math.max(0, Math.min(max, finalRaw));
+      onChange(finalVal);
+      setDisplayValue(finalVal);
+      // Snap to exact pixel grid
+      el.scrollTo({ top: (PADDING + finalVal) * ITEM_H, behavior: "smooth" });
+    }, 120);
   }, [max, onChange]);
+
+  // Mouse-wheel: step exactly 1 item per wheel tick (prevents the 2-item jump)
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const el = containerRef.current;
+    if (!el) return;
+
+    const dir = e.deltaY > 0 ? 1 : -1;
+    const currentCenter = Math.round(el.scrollTop / ITEM_H) - PADDING;
+    const nextVal = Math.max(0, Math.min(max, currentCenter + dir));
+    el.scrollTo({ top: (PADDING + nextVal) * ITEM_H, behavior: "smooth" });
+  }, [max]);
 
   return (
     <div className="flex flex-col items-center gap-2">
       <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{label}</span>
       <div className="relative" style={{ height: VISIBLE * ITEM_H, width: 88 }}>
-        <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/40 to-transparent z-10 pointer-events-none rounded-t-xl" />
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/40 to-transparent z-10 pointer-events-none rounded-b-xl" />
+        {/* Strong top fade — must fully hide non-selected items */}
+        <div
+          className="absolute top-0 inset-x-0 z-10 pointer-events-none"
+          style={{
+            height: PADDING * ITEM_H,
+            background: "linear-gradient(to bottom, rgba(12,6,34,0.97) 40%, transparent 100%)",
+          }}
+        />
+        {/* Strong bottom fade */}
+        <div
+          className="absolute bottom-0 inset-x-0 z-10 pointer-events-none"
+          style={{
+            height: PADDING * ITEM_H,
+            background: "linear-gradient(to top, rgba(12,6,34,0.97) 40%, transparent 100%)",
+          }}
+        />
+        {/* Selection highlight (stays fixed in the center slot) */}
         <div
           className="absolute inset-x-2 z-20 pointer-events-none rounded-xl"
-          style={{ top: PADDING * ITEM_H, height: ITEM_H, background: `${accent}14`, border: `1px solid ${accent}30` }}
+          style={{
+            top: PADDING * ITEM_H,
+            height: ITEM_H,
+            background: `${accent}14`,
+            border: `1px solid ${accent}30`,
+          }}
         />
         <div
           ref={containerRef}
           onScroll={handleScroll}
+          onWheel={handleWheel}
           className="overflow-y-scroll h-full"
           style={{ scrollSnapType: "y mandatory", scrollbarWidth: "none" }}
         >
@@ -89,18 +142,22 @@ function WheelPicker({
             <div key={`pt${i}`} style={{ height: ITEM_H, scrollSnapAlign: "center" }} />
           ))}
           {Array.from({ length: max + 1 }, (_, i) => i).map((item) => {
-            const isSel = item === value;
+            // Use displayValue (real-time scroll position) — not value prop
+            const isSel = item === displayValue;
             return (
               <div
                 key={item}
                 onClick={() => {
                   onChange(item);
                   containerRef.current?.scrollTo({ top: (PADDING + item) * ITEM_H, behavior: "smooth" });
+                  setDisplayValue(item);
                 }}
                 style={{ height: ITEM_H, scrollSnapAlign: "center" }}
                 className={cn(
-                  "flex items-center justify-center cursor-pointer transition-all duration-150 select-none tabular-nums font-mono font-thin",
-                  isSel ? "text-white text-4xl" : "text-white/20 text-2xl hover:text-white/40"
+                  "flex items-center justify-center cursor-pointer select-none tabular-nums font-mono transition-none",
+                  isSel
+                    ? "text-white text-4xl font-thin"
+                    : "text-white/18 text-2xl font-thin"
                 )}
               >
                 {item.toString().padStart(2, "0")}

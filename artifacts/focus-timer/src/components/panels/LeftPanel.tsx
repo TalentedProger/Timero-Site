@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { X, Image as ImageIcon, Volume2, Play, ChevronRight, Palette, SunDim, Type } from "lucide-react";
+import { X, Image as ImageIcon, Play, ChevronRight, Palette, Type } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { backgrounds } from "@/lib/backgrounds";
 import { playSound } from "@/lib/sounds";
-import { Slider } from "@/components/ui/slider";
+import { AccentSlider } from "@/components/ui/accent-slider";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getT } from "@/lib/i18n";
@@ -51,15 +51,15 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
     { id: "ripple",  label: t.animRipple },
   ];
 
-  // Resolve the current background URL
+  // Resolve current bg (including custom)
   const currentBg = settings.selectedBackground === "custom"
     ? { id: "custom", name: "Custom", url: settings.customBackgroundUrl ?? "", category: "abstract" as const }
     : backgrounds.find((b) => b.id === settings.selectedBackground);
 
-  // Show current bg first, then next 5
+  // Show current bg first, then next 3 others (4 total, 2-col grid)
   const previewBgs = [
     ...(currentBg ? [currentBg] : []),
-    ...backgrounds.filter((b) => b.id !== settings.selectedBackground).slice(0, 5),
+    ...backgrounds.filter((b) => b.id !== settings.selectedBackground).slice(0, 3),
   ];
 
   return (
@@ -85,7 +85,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
         <ScrollArea className="flex-1">
           <div className="px-6 py-5 space-y-8">
 
-            {/* Background */}
+            {/* ── Background ── */}
             <section className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
@@ -98,55 +98,105 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                   {t.allBackgrounds} <ChevronRight className="w-3 h-3" />
                 </button>
               </div>
-              <div className="grid grid-cols-3 gap-2">
+
+              {/* 2-column grid, larger cards */}
+              <div className="grid grid-cols-2 gap-2.5">
                 {previewBgs.map((bg) => {
                   const isActive = settings.selectedBackground === bg.id;
                   return (
                     <button
                       key={bg.id}
-                      onClick={() => {
-                        if (bg.id === "custom") {
-                          setSettings({ selectedBackground: "custom" });
-                        } else {
-                          setSettings({ selectedBackground: bg.id });
-                        }
-                      }}
-                      className="relative aspect-video rounded-xl overflow-hidden transition-all duration-200"
+                      onClick={() => setSettings({ selectedBackground: bg.id })}
+                      className="relative aspect-video rounded-2xl overflow-hidden transition-all duration-200"
                       style={{
-                        border: isActive ? `2px solid ${accent}88` : "2px solid transparent",
-                        boxShadow: isActive ? `0 0 10px ${accent}33` : undefined,
+                        border: isActive ? `2px solid ${accent}99` : "2px solid rgba(255,255,255,0.07)",
+                        boxShadow: isActive ? `0 0 14px ${accent}44` : undefined,
                       }}
                     >
-                      <img src={bg.url} alt={bg.name} className="object-cover w-full h-full opacity-80 hover:opacity-100 transition-opacity" />
+                      <img
+                        src={bg.url}
+                        alt={bg.name}
+                        className="object-cover w-full h-full opacity-80 hover:opacity-100 transition-opacity"
+                      />
                       <div className="absolute inset-0 bg-black/20" />
-                      <span className="absolute bottom-1 left-1.5 text-[9px] font-medium text-white/90">{bg.name}</span>
+                      <span className="absolute bottom-1.5 left-2 text-[10px] font-medium text-white/90 drop-shadow">
+                        {bg.name}
+                      </span>
+                      {isActive && (
+                        <div
+                          className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                          style={{ background: accent }}
+                        >
+                          <svg viewBox="0 0 10 8" className="w-2.5 h-2.5 fill-white">
+                            <path d="M1 4l3 3 5-6" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      )}
                     </button>
                   );
                 })}
               </div>
             </section>
 
-            {/* Dimming */}
+            {/* ── Dimming ── */}
             <section className="space-y-3">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
-                <SunDim className="w-3.5 h-3.5" /> {t.dimming}
-              </h3>
-              <div
-                className="flex items-center gap-3"
-                style={{ "--color-primary": accent } as React.CSSProperties}
-              >
-                <SunDim className="w-4 h-4 text-white/25 shrink-0" />
-                <Slider
+              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest">{t.dimming}</h3>
+              <div className="flex items-center gap-3">
+                <AccentSlider
                   value={[settings.backgroundDim]}
                   onValueChange={([val]) => setSettings({ backgroundDim: val })}
                   min={0} max={85} step={1}
+                  accent={accent}
                   className="flex-1"
                 />
-                <span className="text-xs text-white/30 w-8 text-right">{settings.backgroundDim}%</span>
+                <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.backgroundDim}%</span>
               </div>
             </section>
 
-            {/* Animation */}
+            {/* ── Sound ── */}
+            <section className="space-y-3">
+              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest">{t.sound}</h3>
+              <div className="flex items-center gap-3">
+                <AccentSlider
+                  value={[settings.volume]}
+                  onValueChange={([val]) => setSettings({ volume: val })}
+                  min={0} max={100} step={1}
+                  accent={accent}
+                  className="flex-1"
+                />
+                <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.volume}%</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {SOUND_OPTIONS.map((opt) => {
+                  const isActive = settings.selectedSound === opt.id;
+                  return (
+                    <div
+                      key={opt.id}
+                      className="flex items-center justify-between px-3 py-2 rounded-xl transition-all"
+                      style={{
+                        border: isActive ? `1px solid ${accent}44` : "1px solid rgba(255,255,255,0.06)",
+                        background: isActive ? `${accent}10` : "rgba(255,255,255,0.03)",
+                      }}
+                    >
+                      <button
+                        className="flex-1 text-left text-sm text-white/75"
+                        onClick={() => setSettings({ selectedSound: opt.id })}
+                      >
+                        {opt.label}
+                      </button>
+                      <button
+                        onClick={() => playSound(opt.id, settings.volume)}
+                        className="p-1.5 rounded-lg hover:bg-white/10 text-white/35 hover:text-white transition-colors"
+                      >
+                        <Play className="w-3 h-3" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* ── Animation ── */}
             <section className="space-y-3">
               <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest">{t.animation}</h3>
               <div className="flex flex-wrap gap-2">
@@ -170,49 +220,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
               </div>
             </section>
 
-            {/* Sound */}
-            <section className="space-y-3">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
-                <Volume2 className="w-3.5 h-3.5" /> {t.sound}
-              </h3>
-              <div
-                className="flex items-center gap-3"
-                style={{ "--color-primary": accent } as React.CSSProperties}
-              >
-                <Volume2 className="w-4 h-4 text-white/25 shrink-0" />
-                <Slider
-                  value={[settings.volume]}
-                  onValueChange={([val]) => setSettings({ volume: val })}
-                  max={100} step={1}
-                  className="flex-1"
-                />
-                <span className="text-xs text-white/30 w-8 text-right">{settings.volume}%</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                {SOUND_OPTIONS.map((opt) => {
-                  const isActive = settings.selectedSound === opt.id;
-                  return (
-                    <div
-                      key={opt.id}
-                      className="flex items-center justify-between px-3 py-2 rounded-xl transition-all"
-                      style={{
-                        border: isActive ? `1px solid ${accent}44` : "1px solid rgba(255,255,255,0.06)",
-                        background: isActive ? `${accent}10` : "rgba(255,255,255,0.03)",
-                      }}
-                    >
-                      <button className="flex-1 text-left text-sm text-white/75" onClick={() => setSettings({ selectedSound: opt.id })}>
-                        {opt.label}
-                      </button>
-                      <button onClick={() => playSound(opt.id, settings.volume)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/35 hover:text-white transition-colors">
-                        <Play className="w-3 h-3" />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* Palette */}
+            {/* ── Accent Color ── */}
             <section className="space-y-3">
               <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
                 <Palette className="w-3.5 h-3.5" /> {t.accentColor}
@@ -228,7 +236,9 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                       style={{
                         background: color.hex,
                         transform: isActive ? "scale(1.12)" : "scale(1)",
-                        boxShadow: isActive ? `0 0 0 2px rgba(255,255,255,0.65), 0 0 14px ${color.hex}66` : "none",
+                        boxShadow: isActive
+                          ? `0 0 0 2px rgba(255,255,255,0.65), 0 0 14px ${color.hex}66`
+                          : "none",
                       }}
                     >
                       {isActive && (
@@ -242,7 +252,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
               </div>
             </section>
 
-            {/* Font */}
+            {/* ── Font ── */}
             <section className="space-y-3">
               <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
                 <Type className="w-3.5 h-3.5" /> {t.font}
@@ -254,9 +264,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                     <button
                       key={font.id}
                       onClick={() => setSettings({ fontFamily: font.id })}
-                      className={cn(
-                        "flex flex-col items-start px-3.5 py-3 rounded-xl transition-all duration-200 text-left"
-                      )}
+                      className={cn("flex flex-col items-start px-3.5 py-3 rounded-xl transition-all duration-200 text-left")}
                       style={
                         isActive
                           ? { background: `${accent}18`, border: `1px solid ${accent}50` }
@@ -280,7 +288,6 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
         </ScrollArea>
       </motion.div>
 
-      {/* Background gallery overlay */}
       <BackgroundGallery
         isOpen={galleryOpen}
         onClose={() => setGalleryOpen(false)}

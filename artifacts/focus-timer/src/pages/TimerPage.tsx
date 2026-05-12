@@ -13,6 +13,7 @@ import { useTimer } from "@/hooks/useTimer";
 import { useHistory } from "@/hooks/useHistory";
 import { calculateStats } from "@/lib/stats";
 import { backgrounds } from "@/lib/backgrounds";
+import { getFontCss } from "@/lib/fonts";
 
 export default function TimerPage() {
   const { settings, setSettings } = useSettings();
@@ -27,9 +28,11 @@ export default function TimerPage() {
   const timer = useTimer(settings.defaultDuration);
   const stats = calculateStats(history);
 
+  // Resolve background URL — handles "custom" id
   const bgImage =
-    backgrounds.find((b) => b.id === settings.selectedBackground)?.url ??
-    backgrounds[0].url;
+    settings.selectedBackground === "custom"
+      ? settings.customBackgroundUrl || backgrounds[0].url
+      : backgrounds.find((b) => b.id === settings.selectedBackground)?.url ?? backgrounds[0].url;
 
   const dimOpacity = settings.backgroundDim / 100;
 
@@ -94,7 +97,12 @@ export default function TimerPage() {
   };
 
   return (
-    <div className="relative min-h-[100dvh] w-full overflow-hidden bg-black text-white font-sans">
+    // Apply selected font here — inline style cascades to all children and
+    // overrides any Tailwind font-sans class because inline styles win.
+    <div
+      className="relative min-h-[100dvh] w-full overflow-hidden bg-black text-white"
+      style={{ fontFamily: getFontCss(settings.fontFamily) }}
+    >
       {/* Background crossfade */}
       <AnimatePresence mode="sync">
         <motion.div
@@ -165,14 +173,8 @@ export default function TimerPage() {
       <BottomDock
         isLeftOpen={isLeftOpen}
         isRightOpen={isRightOpen}
-        onToggleLeft={() => {
-          setIsLeftOpen((v) => !v);
-          setIsRightOpen(false);
-        }}
-        onToggleRight={() => {
-          setIsRightOpen((v) => !v);
-          setIsLeftOpen(false);
-        }}
+        onToggleLeft={() => { setIsLeftOpen((v) => !v); setIsRightOpen(false); }}
+        onToggleRight={() => { setIsRightOpen((v) => !v); setIsLeftOpen(false); }}
         onToggleMinimal={() => setIsMinimalMode(true)}
       />
 

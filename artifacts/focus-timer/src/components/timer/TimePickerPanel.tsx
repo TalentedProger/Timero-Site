@@ -41,100 +41,47 @@ function WheelPicker({
   value: number; max: number; onChange: (v: number) => void; label: string; accent: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  // displayValue tracks what's VISUALLY centered right now (updates on every scroll frame)
-  const [displayValue, setDisplayValue] = useState(value);
-  const snapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const programmaticRef = useRef(false);
+  const isScrolling = useRef(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // On mount: jump instantly to the correct position
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
     el.scrollTop = (PADDING + value) * ITEM_H;
-    setDisplayValue(value);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // When parent changes value (preset click, etc.) scroll smoothly
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
-    const target = (PADDING + value) * ITEM_H;
-    if (Math.abs(el.scrollTop - target) < 2) return; // already there
-    programmaticRef.current = true;
-    el.scrollTo({ top: target, behavior: "smooth" });
-    setDisplayValue(value);
-    setTimeout(() => { programmaticRef.current = false; }, 400);
+    if (!el || isScrolling.current) return;
+    el.scrollTo({ top: (PADDING + value) * ITEM_H, behavior: "smooth" });
   }, [value]);
 
-  // On every scroll frame: read which item is centered → update displayValue immediately
   const handleScroll = useCallback(() => {
     const el = containerRef.current;
     if (!el) return;
-
-    const raw = el.scrollTop / ITEM_H - PADDING;
-    const nearest = Math.max(0, Math.min(max, Math.round(raw)));
-    setDisplayValue(nearest);
-
-    // Debounce: after user stops, snap perfectly and commit to parent
-    if (snapTimerRef.current) clearTimeout(snapTimerRef.current);
-    snapTimerRef.current = setTimeout(() => {
-      const finalRaw = Math.round(el.scrollTop / ITEM_H) - PADDING;
-      const finalVal = Math.max(0, Math.min(max, finalRaw));
-      onChange(finalVal);
-      setDisplayValue(finalVal);
-      // Snap to exact pixel grid
-      el.scrollTo({ top: (PADDING + finalVal) * ITEM_H, behavior: "smooth" });
-    }, 120);
+    isScrolling.current = true;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      const raw = Math.round(el.scrollTop / ITEM_H) - PADDING;
+      onChange(Math.max(0, Math.min(max, raw)));
+      isScrolling.current = false;
+    }, 80);
   }, [max, onChange]);
-
-  // Mouse-wheel: step exactly 1 item per wheel tick (prevents the 2-item jump)
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const el = containerRef.current;
-    if (!el) return;
-
-    const dir = e.deltaY > 0 ? 1 : -1;
-    const currentCenter = Math.round(el.scrollTop / ITEM_H) - PADDING;
-    const nextVal = Math.max(0, Math.min(max, currentCenter + dir));
-    el.scrollTo({ top: (PADDING + nextVal) * ITEM_H, behavior: "smooth" });
-  }, [max]);
 
   return (
     <div className="flex flex-col items-center gap-2">
       <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{label}</span>
       <div className="relative" style={{ height: VISIBLE * ITEM_H, width: 88 }}>
-        {/* Strong top fade — must fully hide non-selected items */}
-        <div
-          className="absolute top-0 inset-x-0 z-10 pointer-events-none"
-          style={{
-            height: PADDING * ITEM_H,
-            background: "linear-gradient(to bottom, rgba(12,6,34,0.97) 40%, transparent 100%)",
-          }}
-        />
-        {/* Strong bottom fade */}
-        <div
-          className="absolute bottom-0 inset-x-0 z-10 pointer-events-none"
-          style={{
-            height: PADDING * ITEM_H,
-            background: "linear-gradient(to top, rgba(12,6,34,0.97) 40%, transparent 100%)",
-          }}
-        />
-        {/* Selection highlight (stays fixed in the center slot) */}
+        <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none rounded-t-xl" />
+        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none rounded-b-xl" />
         <div
           className="absolute inset-x-2 z-20 pointer-events-none rounded-xl"
-          style={{
-            top: PADDING * ITEM_H,
-            height: ITEM_H,
-            background: `${accent}14`,
-            border: `1px solid ${accent}30`,
-          }}
+          style={{ top: PADDING * ITEM_H, height: ITEM_H, background: `${accent}14`, border: `1px solid ${accent}30` }}
         />
         <div
           ref={containerRef}
           onScroll={handleScroll}
-          onWheel={handleWheel}
           className="overflow-y-scroll h-full"
           style={{ scrollSnapType: "y mandatory", scrollbarWidth: "none" }}
         >
@@ -142,22 +89,18 @@ function WheelPicker({
             <div key={`pt${i}`} style={{ height: ITEM_H, scrollSnapAlign: "center" }} />
           ))}
           {Array.from({ length: max + 1 }, (_, i) => i).map((item) => {
-            // Use displayValue (real-time scroll position) — not value prop
-            const isSel = item === displayValue;
+            const isSel = item === value;
             return (
               <div
                 key={item}
                 onClick={() => {
                   onChange(item);
                   containerRef.current?.scrollTo({ top: (PADDING + item) * ITEM_H, behavior: "smooth" });
-                  setDisplayValue(item);
                 }}
                 style={{ height: ITEM_H, scrollSnapAlign: "center" }}
                 className={cn(
-                  "flex items-center justify-center cursor-pointer select-none tabular-nums font-mono transition-none",
-                  isSel
-                    ? "text-white text-4xl font-thin"
-                    : "text-white/18 text-2xl font-thin"
+                  "flex items-center justify-center cursor-pointer transition-all duration-150 select-none tabular-nums font-mono font-thin",
+                  isSel ? "text-white text-4xl" : "text-white/22 text-2xl hover:text-white/40"
                 )}
               >
                 {item.toString().padStart(2, "0")}
@@ -240,22 +183,21 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
             transition={{ type: "spring", damping: 30, stiffness: 340 }}
             className="fixed z-50 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 top-1/2 -translate-y-1/2 w-full sm:w-[420px]"
           >
-            {/* Main glass card */}
+            {/* Main glass card — same surface as LeftPanel */}
             <div
-              className="rounded-3xl overflow-hidden"
+              className="rounded-3xl overflow-hidden border border-white/8"
               style={{
-                background: "linear-gradient(145deg, rgba(20,12,50,0.80) 0%, rgba(8,8,28,0.76) 100%)",
-                backdropFilter: "blur(56px)",
-                WebkitBackdropFilter: "blur(56px)",
-                border: "1px solid rgba(255,255,255,0.10)",
-                boxShadow: `0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04) inset, 0 0 80px ${accent}18`,
+                background: "rgba(8,8,18,0.75)",
+                backdropFilter: "blur(32px)",
+                WebkitBackdropFilter: "blur(32px)",
+                boxShadow: "0 24px 60px rgba(0,0,0,0.55)",
               }}
             >
               {/* Header */}
               <div className="flex items-center justify-between px-5 pt-5 pb-4">
-                <div className="flex items-center gap-2" style={{ color: `${accent}aa` }}>
+                <div className="flex items-center gap-2 text-white/90">
                   <Clock className="w-4 h-4" />
-                  <span className="text-sm font-semibold tracking-wide">{t.setDuration}</span>
+                  <span className="text-base font-semibold tracking-wide">{t.setDuration}</span>
                 </div>
                 <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/8 transition-colors text-white/35 hover:text-white">
                   <X className="w-4 h-4" />

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { TimerDisplay } from "@/components/timer/TimerDisplay";
 import { TimerControls } from "@/components/timer/TimerControls";
@@ -15,6 +15,34 @@ import { calculateStats } from "@/lib/stats";
 import { backgrounds } from "@/lib/backgrounds";
 import { getFontCss } from "@/lib/fonts";
 
+// Memoized background component for better performance
+const BackgroundImage = memo(({ bgImage, dimOpacity }: { bgImage: string; dimOpacity: number }) => (
+  <AnimatePresence mode="sync">
+    <motion.div
+      key={bgImage}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1.2 }}
+      className="absolute inset-0 z-0"
+    >
+      <img 
+        src={bgImage} 
+        alt="background" 
+        className="w-full h-full object-cover"
+        loading="eager"
+        decoding="async"
+      />
+      <div
+        className="absolute inset-0 transition-opacity duration-500"
+        style={{ background: `rgba(0,0,0,${dimOpacity})` }}
+      />
+    </motion.div>
+  </AnimatePresence>
+));
+
+BackgroundImage.displayName = 'BackgroundImage';
+
 export default function TimerPage() {
   const { settings, setSettings } = useSettings();
   const { addSession, history } = useHistory();
@@ -26,13 +54,15 @@ export default function TimerPage() {
   const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
 
   const timer = useTimer(settings.defaultDuration);
-  const stats = calculateStats(history);
+  const stats = useMemo(() => calculateStats(history), [history]);
 
   // Resolve background URL — handles "custom" id
-  const bgImage =
+  const bgImage = useMemo(() =>
     settings.selectedBackground === "custom"
       ? settings.customBackgroundUrl || backgrounds[0].url
-      : backgrounds.find((b) => b.id === settings.selectedBackground)?.url ?? backgrounds[0].url;
+      : backgrounds.find((b) => b.id === settings.selectedBackground)?.url ?? backgrounds[0].url,
+    [settings.selectedBackground, settings.customBackgroundUrl]
+  );
 
   const dimOpacity = settings.backgroundDim / 100;
 
@@ -53,9 +83,9 @@ export default function TimerPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer.timeLeft, timer.duration, timer.isActive]);
 
-  const handlePause = () => timer.pause();
+  const handlePause = useCallback(() => timer.pause(), [timer]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     if (timer.isActive) {
       addSession({
         taskName: taskName || "Focus Session",
@@ -66,12 +96,12 @@ export default function TimerPage() {
       });
     }
     timer.reset();
-  };
+  }, [timer, taskName, addSession, settings.animationStyle, settings.selectedBackground]);
 
-  const handlePresetSelect = (durationSeconds: number) => {
+  const handlePresetSelect = useCallback((durationSeconds: number) => {
     setSettings({ defaultDuration: durationSeconds });
     timer.reset(durationSeconds);
-  };
+  }, [timer, setSettings]);
 
   const handleAdjust = useCallback(
     (deltaSecs: number) => {
@@ -83,43 +113,27 @@ export default function TimerPage() {
     [timer, setSettings]
   );
 
-  const handleTimePickerConfirm = (seconds: number) => {
+  const handleTimePickerConfirm = useCallback((seconds: number) => {
     setSettings({ defaultDuration: seconds });
     timer.reset(seconds);
-  };
+  }, [timer, setSettings]);
 
-  const formatTotalTime = (minutes: number) => {
+  const formatTotalTime = useCallback((minutes: number) => {
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
     if (h > 0 && m > 0) return `${h}h ${m}m`;
     if (h > 0) return `${h}h`;
     return `${m}m`;
-  };
+  }, []);
+
+  const fontFamily = useMemo(() => getFontCss(settings.fontFamily), [settings.fontFamily]);
 
   return (
-    // Apply selected font here — inline style cascades to all children and
-    // overrides any Tailwind font-sans class because inline styles win.
     <div
       className="relative min-h-[100dvh] w-full overflow-hidden bg-black text-white"
-      style={{ fontFamily: getFontCss(settings.fontFamily) }}
+      style={{ fontFamily }}
     >
-      {/* Background crossfade */}
-      <AnimatePresence mode="sync">
-        <motion.div
-          key={bgImage}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.2 }}
-          className="absolute inset-0 z-0"
-        >
-          <img src={bgImage} alt="background" className="w-full h-full object-cover" />
-          <div
-            className="absolute inset-0 transition-opacity duration-500"
-            style={{ background: `rgba(0,0,0,${dimOpacity})` }}
-          />
-        </motion.div>
-      </AnimatePresence>
+      <BackgroundImage bgImage={bgImage} dimOpacity={dimOpacity} />
 
       {/* Top-right — total focused today */}
       {stats.totalFocusMinutes > 0 && (

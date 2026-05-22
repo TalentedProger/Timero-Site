@@ -156,16 +156,53 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
             {/* ── Sound ── */}
             <section className="space-y-3">
               <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest">{t.sound}</h3>
-              <div className="flex items-center gap-3">
-                <AccentSlider
-                  value={[settings.volume]}
-                  onValueChange={([val]) => setSettings({ volume: val })}
-                  min={0} max={100} step={1}
-                  accent={accent}
-                  className="flex-1"
-                />
-                <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.volume}%</span>
+              
+              {/* Volume */}
+              <div className="space-y-2">
+                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Громкость</span>
+                <div className="flex items-center gap-3">
+                  <AccentSlider
+                    value={[settings.volume]}
+                    onValueChange={([val]) => setSettings({ volume: val })}
+                    min={0} max={100} step={1}
+                    accent={accent}
+                    className="flex-1"
+                  />
+                  <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.volume}%</span>
+                </div>
               </div>
+
+              {/* Repeat Count */}
+              <div className="space-y-2">
+                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Кол-во повторений</span>
+                <div className="flex items-center gap-3">
+                  <AccentSlider
+                    value={[settings.soundRepeatCount]}
+                    onValueChange={([val]) => setSettings({ soundRepeatCount: val })}
+                    min={1} max={10} step={1}
+                    accent={accent}
+                    className="flex-1"
+                  />
+                  <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.soundRepeatCount}</span>
+                </div>
+              </div>
+
+              {/* Play Duration */}
+              <div className="space-y-2">
+                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Время проигрывания (сек)</span>
+                <div className="flex items-center gap-3">
+                  <AccentSlider
+                    value={[settings.soundPlayDuration]}
+                    onValueChange={([val]) => setSettings({ soundPlayDuration: val })}
+                    min={1} max={10} step={0.5}
+                    accent={accent}
+                    className="flex-1"
+                  />
+                  <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.soundPlayDuration}s</span>
+                </div>
+              </div>
+
+              {/* Sound Options */}
               <div className="grid grid-cols-2 gap-2">
                 {SOUND_OPTIONS.map((opt) => {
                   const isActive = settings.selectedSound === opt.id;
@@ -185,7 +222,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                         {opt.label}
                       </button>
                       <button
-                        onClick={() => playSound(opt.id, settings.volume)}
+                        onClick={() => playSound(opt.id, settings.volume, 1, 1)}
                         className="p-1.5 rounded-lg hover:bg-white/10 text-white/35 hover:text-white transition-colors"
                       >
                         <Play className="w-3 h-3" />
@@ -218,6 +255,23 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                   );
                 })}
               </div>
+              
+              {/* Animation Speed */}
+              {settings.animationStyle !== "none" && (
+                <div className="space-y-2 pt-1">
+                  <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Скорость анимации</span>
+                  <div className="flex items-center gap-3">
+                    <AccentSlider
+                      value={[settings.animationSpeed]}
+                      onValueChange={([val]) => setSettings({ animationSpeed: val })}
+                      min={10} max={100} step={5}
+                      accent={accent}
+                      className="flex-1"
+                    />
+                    <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.animationSpeed}%</span>
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* ── Accent Color ── */}

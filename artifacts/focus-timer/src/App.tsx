@@ -1,16 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import TimerPage from "@/pages/TimerPage";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 import { HistoryProvider } from "@/contexts/HistoryContext";
 import { useSettings } from "@/hooks/useSettings";
 import { getFontCss } from "@/lib/fonts";
 
-const queryClient = new QueryClient();
+// Lazy load pages for better performance
+const TimerPage = lazy(() => import("@/pages/TimerPage"));
+const NotFound = lazy(() => import("@/pages/not-found"));
 
 function FontInjector() {
   const { settings } = useSettings();
@@ -24,30 +21,43 @@ function FontInjector() {
   return null;
 }
 
+function LoadingFallback() {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      background: '#000',
+      color: '#fff',
+      fontFamily: 'system-ui'
+    }}>
+      <div>Загрузка...</div>
+    </div>
+  );
+}
+
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={TimerPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={<LoadingFallback />}>
+      <Switch>
+        <Route path="/" component={TimerPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SettingsProvider>
-        <HistoryProvider>
-          <FontInjector />
-          <TooltipProvider>
-            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-              <Router />
-            </WouterRouter>
-            <Toaster />
-          </TooltipProvider>
-        </HistoryProvider>
-      </SettingsProvider>
-    </QueryClientProvider>
+    <SettingsProvider>
+      <HistoryProvider>
+        <FontInjector />
+        <WouterRouter>
+          <Router />
+        </WouterRouter>
+      </HistoryProvider>
+    </SettingsProvider>
   );
 }
 

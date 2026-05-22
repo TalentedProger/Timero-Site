@@ -99,8 +99,8 @@ function WheelPicker({
                 }}
                 style={{ height: ITEM_H, scrollSnapAlign: "center" }}
                 className={cn(
-                  "flex items-center justify-center cursor-pointer transition-all duration-150 select-none tabular-nums font-mono font-thin",
-                  isSel ? "text-white text-4xl" : "text-white/22 text-2xl hover:text-white/40"
+                  "flex items-center justify-center cursor-pointer transition-all duration-150 select-none tabular-nums font-thin",
+                  isSel ? "text-white text-4xl font-bold" : "text-white/22 text-2xl hover:text-white/40"
                 )}
               >
                 {item.toString().padStart(2, "0")}
@@ -320,7 +320,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
                   disabled={totalSeconds < 60}
                   className={cn("w-full py-4 rounded-2xl text-sm font-semibold tracking-wide transition-all flex items-center justify-center gap-2", totalSeconds < 60 && "opacity-30 cursor-not-allowed")}
                   style={totalSeconds >= 60
-                    ? { background: accent, boxShadow: `0 0 28px ${accent}55`, color: "white" }
+                    ? { background: accent, color: "white" }
                     : { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.3)" }}
                 >
                   <Check className="w-4 h-4" />

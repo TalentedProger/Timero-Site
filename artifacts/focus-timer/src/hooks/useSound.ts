@@ -7,9 +7,14 @@ export function useSound() {
 
   const playSound = useCallback(
     (type?: string) => {
-      synthSound(type || settings.selectedSound, settings.volume);
+      synthSound(
+        type || settings.selectedSound, 
+        settings.volume,
+        settings.soundRepeatCount,
+        settings.soundPlayDuration
+      );
     },
-    [settings.selectedSound, settings.volume]
+    [settings.selectedSound, settings.volume, settings.soundRepeatCount, settings.soundPlayDuration]
   );
 
   return { playSound };

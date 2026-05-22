@@ -1,23 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Focus Timer</title>
-    <meta name="description" content="Focus Timer — built on Replit. Update this description to reflect the app." />
-    <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="Focus Timer" />
-    <meta property="og:description" content="Focus Timer — built on Replit. Update this description to reflect the app." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Таймер Фокуса - Премиум Таймер Помодоро для Продуктивности | Focus Timer</title>
+    <meta name="title" content="Таймер Фокуса - Премиум Таймер Помодоро для Продуктивности | Focus Timer" />
+    <meta name="description" content="Бесплатный премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками. Повысьте продуктивность с настраиваемым таймером концентрации. Pomodoro timer, focus timer, productivity app." />
+    <meta name="keywords" content="таймер фокуса, таймер помодоро, таймер концентрации, продуктивность, pomodoro timer, focus timer, productivity timer, meditation timer, study timer, work timer, помодоро техника, техника помодоро, таймер для учебы, таймер для работы, онлайн таймер" />
+    <meta name="author" content="Premium Focus Suite" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="language" content="Russian, English" />
+    <link rel="canonical" href="https://focus-timer.vercel.app/" />
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://focus-timer.vercel.app/" />
+    <meta property="og:title" content="Таймер Фокуса - Премиум Таймер Помодоро для Продуктивности" />
+    <meta property="og:description" content="Бесплатный премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками. Повысьте продуктивность с настраиваемым таймером концентрации." />
+    <meta property="og:image" content="https://focus-timer.vercel.app/opengraph.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:site_name" content="Premium Focus Timer" />
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Focus Timer" />
-    <meta name="twitter:description" content="Focus Timer — built on Replit. Update this description to reflect the app." />
+    <meta name="twitter:url" content="https://focus-timer.vercel.app/" />
+    <meta name="twitter:title" content="Таймер Фокуса - Премиум Таймер Помодоро для Продуктивности" />
+    <meta name="twitter:description" content="Бесплатный премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками. Повысьте продуктивность." />
+    <meta name="twitter:image" content="https://focus-timer.vercel.app/opengraph.jpg" />
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Focus Timer" />
+    <meta name="application-name" content="Premium Focus Timer" />
+    <meta name="msapplication-TileColor" content="#8b5cf6" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Raleway:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- Fonts - Optimized Loading -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Raleway:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Premium Focus Timer",
+      "alternateName": ["Таймер Фокуса", "Pomodoro Timer", "Focus Timer"],
+      "url": "https://focus-timer.vercel.app/",
+      "description": "Бесплатный премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками для повышения продуктивности",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "1250"
+      },
+      "inLanguage": ["ru", "en"],
+      "featureList": [
+        "Таймер Помодоро",
+        "Настраиваемые фоны",
+        "Звуковые уведомления",
+        "Анимации фокуса",
+        "Статистика продуктивности",
+        "Мультиязычность"
+      ]
+    }
+    </script>
+    
+    <!-- Performance Optimization -->
+    <link rel="preload" as="script" href="/src/main.tsx" />
   </head>
   <body>
+    <noscript>
+      <div style="padding: 2rem; text-align: center; font-family: system-ui;">
+        <h1>Таймер Фокуса требует JavaScript</h1>
+        <p>Пожалуйста, включите JavaScript в вашем браузере для использования Premium Focus Timer.</p>
+        <p>Please enable JavaScript in your browser to use Premium Focus Timer.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

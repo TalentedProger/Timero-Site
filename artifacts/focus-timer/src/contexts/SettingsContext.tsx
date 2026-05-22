@@ -5,8 +5,11 @@ export interface Settings {
   selectedBackground: string;
   customBackgroundUrl: string;
   animationStyle: "pulse" | "breathe" | "ripple" | "none";
+  animationSpeed: number;
   selectedSound: string;
   volume: number;
+  soundRepeatCount: number;
+  soundPlayDuration: number;
   defaultDuration: number;
   autoRepeat: boolean;
   notificationTriggers: {
@@ -27,8 +30,11 @@ const defaultSettings: Settings = {
   selectedBackground: "ocean",
   customBackgroundUrl: "",
   animationStyle: "breathe",
+  animationSpeed: 50,
   selectedSound: "bell",
   volume: 50,
+  soundRepeatCount: 1,
+  soundPlayDuration: 2,
   defaultDuration: 25 * 60,
   autoRepeat: false,
   notificationTriggers: { "25": false, "50": false, "75": false, "100": true },

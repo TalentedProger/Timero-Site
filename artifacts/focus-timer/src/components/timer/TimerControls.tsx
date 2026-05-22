@@ -53,7 +53,6 @@ export function TimerControls({
         className="w-20 h-20 rounded-full flex items-center justify-center transition-all"
         style={{
           background: accent,
-          boxShadow: `0 0 30px ${accent}66, 0 0 60px ${accent}22`,
         }}
       >
         {isActive ? (

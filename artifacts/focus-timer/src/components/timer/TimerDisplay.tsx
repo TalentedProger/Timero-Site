@@ -104,11 +104,30 @@ export function TimerDisplay({
       ? {
           animate: isActive
             ? {
-                scale: [1, 1.012, 1],
+                scale: animationStyle === "breathe" ? [1, 1.015, 1] : [1, 1.025, 1],
                 transition: {
-                  duration: animationStyle === "breathe" ? 4 : 1.5,
+                  duration: animationStyle === "breathe" 
+                    ? (4 * (100 / settings.animationSpeed))
+                    : (1.5 * (100 / settings.animationSpeed)),
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: [0.4, 0.0, 0.2, 1],
+                },
+              }
+            : {},
+        }
+      : {};
+
+  const rippleVariants =
+    animationStyle === "ripple"
+      ? {
+          animate: isActive
+            ? {
+                scale: [1, 1.02, 0.98, 1],
+                opacity: [1, 0.95, 1, 1],
+                transition: {
+                  duration: 3 * (100 / settings.animationSpeed),
+                  repeat: Infinity,
+                  ease: [0.45, 0.05, 0.55, 0.95],
                 },
               }
             : {},
@@ -184,7 +203,7 @@ export function TimerDisplay({
 
         {/* Clickable digits */}
         <motion.div
-          {...breatheVariants}
+          {...(animationStyle === "ripple" ? rippleVariants : breatheVariants)}
           className="relative z-10 flex flex-col items-center group cursor-pointer"
           onClick={!isActive ? onEditClick : undefined}
           onWheel={handleWheel}
@@ -192,7 +211,7 @@ export function TimerDisplay({
         >
           <span
             className={cn(
-              "font-mono font-thin tabular-nums tracking-tighter drop-shadow-md select-none leading-none text-white transition-all duration-300",
+              "font-thin tabular-nums tracking-tighter drop-shadow-md select-none leading-none text-white transition-all duration-300",
               fontClass
             )}
           >

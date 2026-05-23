@@ -80,19 +80,18 @@ npm run build
 
 ```
 # Ignore platform-specific optional dependencies
+# This prevents EBADPLATFORM errors when deploying from Windows to Linux
 optional=true
 
-# Skip platform checks for optional dependencies
-platform=linux
-
-# Use legacy peer deps to avoid conflicts
-legacy-peer-deps=false
+# Engine strict mode - allow installation even if engines don't match
+engine-strict=false
 ```
 
 **Почему это важно:**
 - Ваш проект разрабатывается на Windows
 - Vercel использует Linux серверы
 - Без `.npmrc` npm попытается установить Windows-специфичные пакеты на Linux и упадет с ошибкой `EBADPLATFORM`
+- `optional=true` позволяет npm пропускать платформо-зависимые optional dependencies
 
 ### Шаг 1.5: Проверка vercel.json
 
@@ -100,9 +99,10 @@ legacy-peer-deps=false
 
 ```json
 {
+  "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm ci --omit=optional || npm install --omit=optional",
+  "installCommand": "npm install --force --no-optional",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -113,8 +113,10 @@ legacy-peer-deps=false
 ```
 
 **Важные параметры:**
-- `installCommand`: использует `--omit=optional` для пропуска платформо-зависимых пакетов
-- `npm ci` быстрее, но если не работает, откатывается на `npm install`
+- `framework: "vite"` - явно указывает Vercel использовать Vite
+- `installCommand: "npm install --force --no-optional"` - пропускает optional dependencies (платформо-зависимые пакеты)
+- `--force` - игнорирует конфликты и продолжает установку
+- `--no-optional` - не устанавливает optional dependencies вообще
 
 ---
 
@@ -183,14 +185,15 @@ git push -u origin main
 **Build and Output Settings:**
 - **Build Command:** `npm run build`
 - **Output Directory:** `dist`
-- **Install Command:** `npm ci --omit=optional || npm install --omit=optional`
+- **Install Command:** `npm install --force --no-optional`
 
 **Environment Variables:**
 - Пока не нужны (оставьте пустым)
 
 **ВАЖНО:** 
-- Команда установки `npm ci --omit=optional || npm install --omit=optional` критически важна
-- Она пропускает платформо-зависимые пакеты (Windows-специфичные на Linux серверах)
+- Команда установки `npm install --force --no-optional` критически важна
+- `--no-optional` пропускает платформо-зависимые пакеты (Windows-специфичные на Linux серверах)
+- `--force` игнорирует конфликты и продолжает установку
 - Без этого деплой упадет с ошибкой `EBADPLATFORM`
 
 ### Шаг 3.4: Деплой
@@ -349,27 +352,26 @@ npm error notsup Actual os: linux
 1. **Создайте файл `.npmrc` в корне проекта:**
 ```
 # Ignore platform-specific optional dependencies
+# This prevents EBADPLATFORM errors when deploying from Windows to Linux
 optional=true
 
-# Skip platform checks for optional dependencies
-platform=linux
-
-# Use legacy peer deps to avoid conflicts
-legacy-peer-deps=false
+# Engine strict mode - allow installation even if engines don't match
+engine-strict=false
 ```
 
 2. **Обновите `vercel.json`:**
 ```json
 {
+  "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm ci --omit=optional || npm install --omit=optional"
+  "installCommand": "npm install --force --no-optional"
 }
 ```
 
 3. **В настройках Vercel проекта:**
    - Settings → General → Build & Development Settings
-   - Install Command: `npm ci --omit=optional || npm install --omit=optional`
+   - Install Command: `npm install --force --no-optional`
 
 4. **Коммит и пуш:**
 ```bash

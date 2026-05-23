@@ -3,25 +3,20 @@
 ## 🚨 Если видите ошибку EBADPLATFORM
 
 ```bash
-# 1. Создайте .npmrc в корне проекта
-echo "optional=true" > .npmrc
-echo "platform=linux" >> .npmrc
-echo "legacy-peer-deps=false" >> .npmrc
-
-# 2. Закоммитьте и запушьте
-git add .npmrc vercel.json
-git commit -m "Fix: Cross-platform deployment"
+# Все файлы уже обновлены! Просто закоммитьте:
+git add .npmrc vercel.json package-lock.json VERCEL_DEPLOY.md
+git commit -m "Fix: Cross-platform Vercel deployment"
 git push origin main
 
-# 3. Vercel автоматически пересоберет проект
+# Vercel автоматически пересоберет проект ✅
 ```
 
-## ✅ Готово!
+## ✅ Что было исправлено
 
-Файлы уже созданы и настроены:
-- ✅ `.npmrc` - конфигурация для кросс-платформенной установки
-- ✅ `vercel.json` - правильная команда установки
-- ✅ `VERCEL_DEPLOY.md` - полная инструкция
+- ✅ `.npmrc` - обновлен с правильными настройками
+- ✅ `vercel.json` - команда установки: `npm install --force --no-optional`
+- ✅ `package-lock.json` - пересоздан без конфликтов
+- ✅ `VERCEL_DEPLOY.md` - обновлена документация
 
 **Просто закоммитьте и запушьте изменения!**
 
@@ -30,5 +25,5 @@ git push origin main
 ## 📖 Подробности
 
 Смотрите:
-- `VERCEL_FIX_SUMMARY.md` - детальное объяснение проблемы и решения
-- `VERCEL_DEPLOY.md` - полная инструкция по деплою
+- `VERCEL_FIX_SUMMARY.md` - детальное объяснение
+- `VERCEL_DEPLOY.md` - полная инструкция

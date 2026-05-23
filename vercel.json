@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd artifacts/focus-timer && npm run build",
+  "outputDirectory": "artifacts/focus-timer/dist",
+  "installCommand": "cd artifacts/focus-timer && npm install --force --no-optional",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./artifacts/focus-timer"
+}

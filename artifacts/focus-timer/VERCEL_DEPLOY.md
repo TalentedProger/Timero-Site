@@ -74,16 +74,35 @@ npm run build
 
 Если сборка прошла успешно, вы увидите папку `dist` с файлами.
 
-### Шаг 1.4: Проверка vercel.json
+### Шаг 1.4: Создание .npmrc (КРИТИЧЕСКИ ВАЖНО!)
+
+**Создайте файл `.npmrc` в корне проекта** для корректной работы на серверах Vercel (Linux):
+
+```
+# Ignore platform-specific optional dependencies
+optional=true
+
+# Skip platform checks for optional dependencies
+platform=linux
+
+# Use legacy peer deps to avoid conflicts
+legacy-peer-deps=false
+```
+
+**Почему это важно:**
+- Ваш проект разрабатывается на Windows
+- Vercel использует Linux серверы
+- Без `.npmrc` npm попытается установить Windows-специфичные пакеты на Linux и упадет с ошибкой `EBADPLATFORM`
+
+### Шаг 1.5: Проверка vercel.json
 
 Убедитесь, что файл `vercel.json` существует и содержит:
 
 ```json
 {
-  "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite",
+  "installCommand": "npm ci --omit=optional || npm install --omit=optional",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -92,6 +111,10 @@ npm run build
   ]
 }
 ```
+
+**Важные параметры:**
+- `installCommand`: использует `--omit=optional` для пропуска платформо-зависимых пакетов
+- `npm ci` быстрее, но если не работает, откатывается на `npm install`
 
 ---
 
@@ -152,18 +175,23 @@ git push -u origin main
 На странице настройки проекта:
 
 **Framework Preset:**
-- Выберите "Vite"
+- Выберите "Vite" (или оставьте "Other" - Vercel автоматически определит)
 
 **Root Directory:**
 - Оставьте пустым (или `./`)
 
 **Build and Output Settings:**
-- Build Command: `npm run build`
-- Output Directory: `dist`
-- Install Command: `npm install`
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist`
+- **Install Command:** `npm ci --omit=optional || npm install --omit=optional`
 
 **Environment Variables:**
 - Пока не нужны (оставьте пустым)
+
+**ВАЖНО:** 
+- Команда установки `npm ci --omit=optional || npm install --omit=optional` критически важна
+- Она пропускает платформо-зависимые пакеты (Windows-специфичные на Linux серверах)
+- Без этого деплой упадет с ошибкой `EBADPLATFORM`
 
 ### Шаг 3.4: Деплой
 
@@ -301,7 +329,56 @@ Sentry.init({
 
 ## 7. Решение проблем
 
-### Проблема 1: Ошибка сборки "Module not found"
+### Проблема 1: Ошибка "EBADPLATFORM" при установке зависимостей
+
+**Симптомы:**
+```
+npm error code EBADPLATFORM
+npm error notsup Unsupported platform for @rollup/rollup-win32-x64-msvc
+npm error notsup Valid os: win32
+npm error notsup Actual os: linux
+```
+
+**Причина:** 
+- Проект разрабатывался на Windows
+- Vercel использует Linux серверы
+- `package-lock.json` содержит Windows-специфичные optional dependencies
+
+**Решение:**
+
+1. **Создайте файл `.npmrc` в корне проекта:**
+```
+# Ignore platform-specific optional dependencies
+optional=true
+
+# Skip platform checks for optional dependencies
+platform=linux
+
+# Use legacy peer deps to avoid conflicts
+legacy-peer-deps=false
+```
+
+2. **Обновите `vercel.json`:**
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm ci --omit=optional || npm install --omit=optional"
+}
+```
+
+3. **В настройках Vercel проекта:**
+   - Settings → General → Build & Development Settings
+   - Install Command: `npm ci --omit=optional || npm install --omit=optional`
+
+4. **Коммит и пуш:**
+```bash
+git add .npmrc vercel.json
+git commit -m "Fix: Add .npmrc for cross-platform compatibility"
+git push origin main
+```
+
+### Проблема 2: Ошибка сборки "Module not found"
 
 **Решение:**
 ```bash
@@ -313,7 +390,7 @@ npm install
 npm run build
 ```
 
-### Проблема 2: 404 при переходе по прямым ссылкам
+### Проблема 3: 404 при переходе по прямым ссылкам
 
 **Причина:** Не настроен роутинг для SPA
 
@@ -329,7 +406,23 @@ npm run build
 }
 ```
 
-### Проблема 3: Изображения не загружаются
+### Проблема 3: 404 при переходе по прямым ссылкам
+
+**Причина:** Не настроен роутинг для SPA
+
+**Решение:** Убедитесь, что в `vercel.json` есть:
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+### Проблема 4: Изображения не загружаются
 
 **Причина:** Неправильные пути к изображениям
 
@@ -338,7 +431,7 @@ npm run build
 - Используйте абсолютные пути: `/image.jpg` вместо `./image.jpg`
 - Проверьте регистр имен файлов (Linux чувствителен к регистру)
 
-### Проблема 4: Медленная загрузка
+### Проблема 5: Медленная загрузка
 
 **Решение:**
 1. Оптимизируйте изображения (используйте WebP)
@@ -346,7 +439,7 @@ npm run build
 3. Используйте code splitting
 4. Проверьте размер бандла: `npm run build -- --analyze`
 
-### Проблема 5: Ошибки TypeScript при сборке
+### Проблема 6: Ошибки TypeScript при сборке
 
 **Решение:**
 ```bash
@@ -367,7 +460,7 @@ npm run typecheck
 }
 ```
 
-### Проблема 6: Превышен лимит размера функций
+### Проблема 7: Превышен лимит размера функций
 
 **Причина:** Слишком большой размер бандла
 
@@ -381,6 +474,7 @@ npm run typecheck
 
 ## 📊 Чеклист перед деплоем
 
+- [ ] Создан файл `.npmrc` для кросс-платформенной совместимости
 - [ ] Локальная сборка работает (`npm run build`)
 - [ ] Все изображения оптимизированы
 - [ ] SEO мета-теги заполнены
@@ -391,6 +485,7 @@ npm run typecheck
 - [ ] Настроены переменные окружения (если нужны)
 - [ ] README.md обновлен
 - [ ] Лицензия добавлена
+- [ ] vercel.json содержит правильную команду установки
 
 ---
 

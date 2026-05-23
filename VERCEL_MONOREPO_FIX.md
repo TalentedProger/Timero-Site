@@ -29,7 +29,7 @@ npm warn Unknown project config "strict-peer-dependencies"
 {
   "buildCommand": "cd artifacts/focus-timer && npm run build",
   "outputDirectory": "artifacts/focus-timer/dist",
-  "installCommand": "cd artifacts/focus-timer && npm install --force --no-optional",
+  "installCommand": "cd artifacts/focus-timer && npm install --include=dev --no-optional",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ./artifacts/focus-timer"
 }
 ```
@@ -37,7 +37,9 @@ npm warn Unknown project config "strict-peer-dependencies"
 **Что это делает:**
 - `buildCommand` - переходит в `artifacts/focus-timer` и собирает проект
 - `outputDirectory` - указывает путь к dist папке внутри монорепозитория
-- `installCommand` - устанавливает зависимости только для focus-timer с флагом `--no-optional`
+- `installCommand` - устанавливает зависимости с devDependencies, но без optional
+  - `--include=dev` - явно включает devDependencies (нужно для Tailwind, Vite, TypeScript)
+  - `--no-optional` - пропускает optional dependencies (платформо-зависимые пакеты)
 - `ignoreCommand` - деплоит только если были изменения в `artifacts/focus-timer`
 
 ### 2. Обновлен корневой `.npmrc`

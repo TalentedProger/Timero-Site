@@ -2,7 +2,7 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install --force --no-optional",
+  "installCommand": "npm install --include=dev --no-optional",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -62,12 +62,5 @@
         }
       ]
     }
-  ],
-  "regions": ["iad1"],
-  "functions": {
-    "api/**/*.ts": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  }
+  ]
 }

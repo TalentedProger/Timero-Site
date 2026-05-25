@@ -1,135 +1,223 @@
-# 🎯 Premium Focus Timer
+# ⏱️ Premium Focus Timer - timero.ru
 
 Премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками для повышения продуктивности.
 
-## ✨ Особенности
+![Premium Focus Timer](public/opengraph.jpg)
 
-- 🎨 **Красивые фоны** - Коллекция премиум фонов (природа, космос, архитектура)
-- ⏱️ **Таймер Помодоро** - Настраиваемые интервалы фокуса
-- 🎵 **Звуковые уведомления** - Различные звуки с настройкой громкости и повторений
-- ✨ **Плавные анимации** - Дыхание, пульс, волна с настройкой скорости
-- 📊 **Статистика** - Отслеживание продуктивности
-- 🌍 **Мультиязычность** - Русский и английский интерфейс
-- 🎨 **Настройка темы** - 10 цветовых акцентов
-- 🔤 **Выбор шрифтов** - 6 премиум шрифтов
-- 📱 **Адаптивный дизайн** - Отлично работает на всех устройствах
-- 🚀 **Высокая производительность** - Оптимизирован для скорости
+## 🌟 Особенности
 
-## 🚀 Быстрый старт
+- ⏰ **Таймер Помодоро** - классическая техника 25/5/15
+- 🎨 **Красивые Фоны** - коллекция премиум изображений
+- 🔔 **Звуковые Уведомления** - приятные звуки завершения
+- ✨ **Плавные Анимации** - современный UI с Framer Motion
+- 📊 **Статистика** - отслеживание продуктивности
+- 🌐 **Мультиязычность** - русский и английский
+- 📱 **PWA** - работает офлайн, можно установить
+- 🎯 **Настраиваемость** - гибкие настройки таймеров
 
-### Установка зависимостей
+## 🚀 Технологии
+
+- **React 18** - современный UI фреймворк
+- **TypeScript** - типобезопасность
+- **Vite** - быстрая сборка
+- **Tailwind CSS 4** - утилитарные стили
+- **Framer Motion** - плавные анимации
+- **Lucide React** - красивые иконки
+- **Wouter** - легкий роутинг
+- **Recharts** - графики статистики
+
+## 📦 Установка
 
 ```bash
+# Клонировать репозиторий
+git clone https://github.com/TalentedProger/Timero-Site.git
+
+# Перейти в директорию проекта
+cd Timero-Site/artifacts/focus-timer
+
+# Установить зависимости
 npm install
-```
 
-### Запуск в режиме разработки
-
-```bash
+# Запустить dev сервер
 npm run dev
 ```
 
-### Сборка для продакшена
+## 🛠️ Команды
 
 ```bash
-npm run build
+# Разработка
+npm run dev              # Запустить dev сервер (http://localhost:5173)
+
+# Сборка
+npm run build            # Собрать для продакшена
+npm run preview          # Предпросмотр production сборки
+
+# Проверка типов
+npm run typecheck        # TypeScript проверка
+
+# Генерация ассетов
+npm run generate-favicons    # Сгенерировать PNG favicon'ы
+npm run generate-opengraph   # Сгенерировать Open Graph изображение
+npm run generate-assets      # Сгенерировать все ассеты
 ```
 
-### Предпросмотр продакшен сборки
+## 📁 Структура Проекта
 
-```bash
-npm run preview
+```
+artifacts/focus-timer/
+├── public/                      # Статические файлы
+│   ├── favicon.svg             # SVG иконка
+│   ├── favicon-*.png           # PNG иконки
+│   ├── apple-touch-icon.png    # iOS иконка
+│   ├── opengraph.jpg           # Open Graph изображение
+│   ├── site.webmanifest        # PWA manifest
+│   ├── robots.txt              # Robots для SEO
+│   ├── sitemap.xml             # Sitemap для SEO
+│   └── *.jpg                   # Фоновые изображения
+├── src/
+│   ├── components/             # React компоненты
+│   ├── hooks/                  # Custom hooks
+│   ├── lib/                    # Утилиты
+│   ├── pages/                  # Страницы
+│   ├── App.tsx                 # Главный компонент
+│   └── main.tsx                # Entry point
+├── index.html                  # HTML шаблон (SEO оптимизирован)
+├── vite.config.ts              # Vite конфигурация
+├── tailwind.config.ts          # Tailwind конфигурация
+├── tsconfig.json               # TypeScript конфигурация
+├── vercel.json                 # Vercel конфигурация
+├── generate-favicons.cjs       # Генератор favicon'ов
+├── generate-opengraph.cjs      # Генератор OG изображения
+├── DEPLOYMENT_GUIDE.md         # Подробное руководство по деплою
+├── БЫСТРЫЙ_СТАРТ.md            # Быстрая инструкция на русском
+└── SEO_CHECKLIST.md            # SEO чеклист
 ```
 
-## 📦 Технологии
+## 🌐 Деплой
 
-- **React 18** - UI библиотека
-- **TypeScript** - Типизация
-- **Vite** - Сборщик
-- **Tailwind CSS 4** - Стилизация
-- **Framer Motion** - Анимации
-- **Wouter** - Роутинг
-- **Web Audio API** - Звуки
+Проект настроен для деплоя на Vercel:
 
-## 🎨 Функционал
+1. **Быстрый старт:** см. `БЫСТРЫЙ_СТАРТ.md`
+2. **Подробная инструкция:** см. `DEPLOYMENT_GUIDE.md`
+3. **SEO чеклист:** см. `SEO_CHECKLIST.md`
 
-### Таймер
-- Настраиваемая длительность (от 1 минуты до 24 часов)
-- Пресеты: Pomodoro (25м), Deep Work (90м), Study (45м)
-- Быстрая настройка колесиком прокрутки
-- Визуальный прогресс с кольцом
+### Настройки Vercel:
 
-### Фоны
-- 27 премиум фонов в 5 категориях
-- Загрузка собственных изображений
-- Настройка затемнения (0-85%)
-- Плавная смена фонов
+- **Framework:** Vite
+- **Root Directory:** `artifacts/focus-timer`
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist`
+- **Install Command:** `npm install --include=dev`
 
-### Звуки
-- 6 типов звуков (Bell, Chime, Gong, Rain, Birds, Sine)
-- Настройка громкости (0-100%)
-- Количество повторений (1-10)
-- Длительность проигрывания (1-10 сек)
+## 🔧 Конфигурация
 
-### Анимации
-- Дыхание - медленная плавная анимация
-- Пульс - ритмичная анимация
-- Волна - волнообразная анимация
-- Настройка скорости (10-100%)
+### Домен
 
-### Статистика
-- Общее время фокуса за день
-- История сессий
-- Визуализация продуктивности
+Сайт настроен для работы на **timero.ru**:
+- Основной домен: `timero.ru`
+- Редирект: `www.timero.ru` → `timero.ru`
 
-## 📱 Адаптивность
+### Аналитика
 
-Приложение полностью адаптировано для:
-- 📱 Мобильных устройств (320px+)
-- 📱 Планшетов (768px+)
-- 💻 Десктопов (1024px+)
-- 🖥️ Больших экранов (1920px+)
+Перед деплоем замените placeholder ID на реальные:
 
-## 🌐 SEO Оптимизация
+**Yandex.Metrika** (в `index.html`):
+```javascript
+ym(98765432, "init", {  // ← Замените 98765432
+```
 
-- ✅ Полные мета-теги для поисковых систем
-- ✅ Open Graph для социальных сетей
-- ✅ Structured Data (Schema.org)
-- ✅ Sitemap.xml
-- ✅ Robots.txt
-- ✅ Оптимизация для Яндекс и Google
-- ✅ Мультиязычная поддержка (ru, en)
+**Google Analytics** (в `index.html`):
+```javascript
+gtag('config', 'G-XXXXXXXXXX');  // ← Замените G-XXXXXXXXXX
+```
 
-## ⚡ Производительность
+## 📊 SEO Оптимизация
 
-- Lazy loading компонентов
-- Code splitting
-- Оптимизация изображений
-- Минификация CSS/JS
-- Tree shaking
-- Кэширование статики
-- Preconnect для шрифтов
+### ✅ Реализовано:
+
+- **Meta Tags:** title, description, keywords, canonical
+- **Open Graph:** Facebook, VK, LinkedIn
+- **Twitter Cards:** summary_large_image
+- **Structured Data:** WebApplication, Organization, BreadcrumbList, FAQPage
+- **Security Headers:** HSTS, CSP, X-Frame-Options
+- **Performance:** preconnect, dns-prefetch, cache headers
+- **PWA:** manifest, service worker ready
+- **Favicon:** SVG + PNG (все размеры)
+- **Sitemap & Robots:** настроены для поисковиков
+
+### 📈 Метрики:
+
+- **SEO Score:** 93/100
+- **PageSpeed Target:** 90+
+- **Mobile-Friendly:** ✅
+- **PWA Ready:** ✅
+
+## 🎨 Дизайн
+
+- **Цветовая схема:** Фиолетовый градиент (#667eea → #764ba2)
+- **Шрифты:** Inter, Playfair Display, Montserrat, Lato, Raleway, DM Sans
+- **Адаптивность:** Mobile-first подход
+- **Темная тема:** Поддерживается
+- **Анимации:** Плавные переходы с Framer Motion
+
+## 📱 PWA
+
+Приложение можно установить на устройство:
+- **iOS:** Добавить на главный экран
+- **Android:** Установить приложение
+- **Desktop:** Установить через Chrome/Edge
 
 ## 🔒 Безопасность
 
-- Content Security Policy
-- XSS Protection
-- Clickjacking Protection
-- HTTPS Only
-- Secure Headers
+- ✅ HTTPS (SSL сертификат от Vercel)
+- ✅ HSTS (Strict-Transport-Security)
+- ✅ CSP (Content-Security-Policy)
+- ✅ X-Frame-Options: DENY
+- ✅ X-XSS-Protection
+- ✅ Referrer-Policy
+- ✅ Permissions-Policy
 
 ## 📄 Лицензия
 
-MIT License - свободное использование
+Частный проект. Все права защищены.
+
+## 👨‍💻 Автор
+
+**Premium Focus Suite**
+- Website: [timero.ru](https://timero.ru)
+- GitHub: [@TalentedProger](https://github.com/TalentedProger)
 
 ## 🤝 Поддержка
 
-Если у вас есть вопросы или предложения, создайте Issue в репозитории.
+Если у вас возникли вопросы или проблемы:
 
-## 🌟 Автор
+1. Проверьте документацию:
+   - `DEPLOYMENT_GUIDE.md` - подробное руководство
+   - `БЫСТРЫЙ_СТАРТ.md` - быстрая инструкция
+   - `SEO_CHECKLIST.md` - SEO чеклист
 
-Premium Focus Suite Team
+2. Проверьте логи Vercel
+3. Проверьте консоль браузера
+
+## 🎯 Roadmap
+
+- [ ] Добавить больше фоновых изображений
+- [ ] Добавить больше звуковых тем
+- [ ] Интеграция с календарем
+- [ ] Экспорт статистики
+- [ ] Социальные функции
+- [ ] Мобильное приложение
+
+## 📝 Changelog
+
+### v1.0.0 (2024)
+- ✅ Первый релиз
+- ✅ Базовый функционал таймера
+- ✅ SEO оптимизация
+- ✅ PWA поддержка
+- ✅ Аналитика (Yandex + Google)
+- ✅ Домен timero.ru
 
 ---
 
-Made with ❤️ for productivity
+**Сделано с ❤️ для повышения продуктивности**

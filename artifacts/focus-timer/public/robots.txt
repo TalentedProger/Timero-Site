@@ -5,7 +5,7 @@ Disallow: /api/
 Disallow: /*.json$
 
 # Sitemap
-Sitemap: https://focus-timer.vercel.app/sitemap.xml
+Sitemap: https://timero.ru/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1

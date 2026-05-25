@@ -12,14 +12,14 @@
     <meta name="author" content="Premium Focus Suite" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="language" content="Russian, English" />
-    <link rel="canonical" href="https://focus-timer.vercel.app/" />
+    <link rel="canonical" href="https://timero.ru/" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://focus-timer.vercel.app/" />
+    <meta property="og:url" content="https://timero.ru/" />
     <meta property="og:title" content="Таймер Фокуса - Премиум Таймер Помодоро для Продуктивности" />
     <meta property="og:description" content="Бесплатный премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками. Повысьте продуктивность с настраиваемым таймером концентрации." />
-    <meta property="og:image" content="https://focus-timer.vercel.app/opengraph.jpg" />
+    <meta property="og:image" content="https://timero.ru/opengraph.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="ru_RU" />
@@ -28,10 +28,10 @@
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://focus-timer.vercel.app/" />
+    <meta name="twitter:url" content="https://timero.ru/" />
     <meta name="twitter:title" content="Таймер Фокуса - Премиум Таймер Помодоро для Продуктивности" />
     <meta name="twitter:description" content="Бесплатный премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками. Повысьте продуктивность." />
-    <meta name="twitter:image" content="https://focus-timer.vercel.app/opengraph.jpg" />
+    <meta name="twitter:image" content="https://timero.ru/opengraph.jpg" />
     
     <!-- Additional SEO -->
     <meta name="theme-color" content="#8b5cf6" />
@@ -43,8 +43,11 @@
     <meta name="format-detection" content="telephone=no" />
     
     <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
     
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -62,7 +65,7 @@
       "@type": "WebApplication",
       "name": "Premium Focus Timer",
       "alternateName": ["Таймер Фокуса", "Pomodoro Timer", "Focus Timer"],
-      "url": "https://focus-timer.vercel.app/",
+      "url": "https://timero.ru/",
       "description": "Бесплатный премиум таймер фокуса и помодоро с красивыми фонами, анимациями и звуками для повышения продуктивности",
       "applicationCategory": "ProductivityApplication",
       "operatingSystem": "Web Browser",
@@ -86,6 +89,116 @@
         "Мультиязычность"
       ]
     }
+    </script>
+    
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Premium Focus Suite",
+      "url": "https://timero.ru/",
+      "logo": "https://timero.ru/favicon.svg",
+      "sameAs": [],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Support",
+        "availableLanguage": ["Russian", "English"]
+      }
+    }
+    </script>
+    
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Главная",
+          "item": "https://timero.ru/"
+        }
+      ]
+    }
+    </script>
+    
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Что такое техника Помодоро?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Техника Помодоро - это метод управления временем, разработанный Франческо Чирилло. Он предполагает работу в течение 25 минут (один помодоро), затем короткий перерыв 5 минут. После 4 помодоро следует длинный перерыв 15-30 минут."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Как использовать таймер фокуса?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Выберите задачу, установите таймер на 25 минут, работайте без отвлечений до звукового сигнала, затем сделайте короткий перерыв. Повторяйте цикл для максимальной продуктивности."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Можно ли настроить длительность таймера?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да, Premium Focus Timer позволяет настраивать длительность рабочих сессий, коротких и длинных перерывов в соответствии с вашими предпочтениями."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Работает ли таймер офлайн?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да, после первой загрузки приложение работает офлайн благодаря технологии Progressive Web App (PWA)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Бесплатен ли Premium Focus Timer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да, Premium Focus Timer полностью бесплатен и не содержит рекламы. Все функции доступны без ограничений."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();
+       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+       ym(98765432, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+       });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/98765432" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
     </script>
     
     <!-- Performance Optimization -->

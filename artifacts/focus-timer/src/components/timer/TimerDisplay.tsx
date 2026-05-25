@@ -38,10 +38,10 @@ export function TimerDisplay({
   const charCount = formattedTime.length;
   const fontClass =
     charCount <= 5
-      ? "text-[5.5rem] sm:text-[6.5rem]"
+      ? "text-[4rem] sm:text-[5.5rem] md:text-[6.5rem]"
       : charCount <= 7
-      ? "text-[3.8rem] sm:text-[5rem]"
-      : "text-[3rem] sm:text-[3.8rem]";
+      ? "text-[3rem] sm:text-[3.8rem] md:text-[5rem]"
+      : "text-[2.5rem] sm:text-[3rem] md:text-[3.8rem]";
 
   // Ring geometry — SVG viewBox is 320×320, center 160×160, radius 140
   const CX = 160;
@@ -135,7 +135,7 @@ export function TimerDisplay({
       : {};
 
   return (
-    <div className="flex items-center gap-4 sm:gap-8">
+    <div className="flex items-center gap-3 sm:gap-8">
       {/* Minus */}
       <motion.button
         whileHover={{ scale: 1.1 }}
@@ -147,7 +147,7 @@ export function TimerDisplay({
         onTouchEnd={stopHold}
         disabled={isActive}
         className={cn(
-          "w-11 h-11 rounded-full flex items-center justify-center border border-white/10 bg-white/5 transition-all",
+          "w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
           isActive
             ? "opacity-0 pointer-events-none"
             : "opacity-100 hover:bg-white/12 hover:border-white/20 text-white/60 hover:text-white"
@@ -157,7 +157,7 @@ export function TimerDisplay({
       </motion.button>
 
       {/* Ring + digits */}
-      <div className="relative flex items-center justify-center w-72 h-72 sm:w-80 sm:h-80">
+      <div className="relative flex items-center justify-center w-64 h-64 sm:w-80 sm:h-80">
         <svg
           className="absolute w-full h-full -rotate-90 pointer-events-none"
           viewBox="0 0 320 320"
@@ -241,7 +241,7 @@ export function TimerDisplay({
         onTouchEnd={stopHold}
         disabled={isActive}
         className={cn(
-          "w-11 h-11 rounded-full flex items-center justify-center border border-white/10 bg-white/5 transition-all",
+          "w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
           isActive
             ? "opacity-0 pointer-events-none"
             : "opacity-100 hover:bg-white/12 hover:border-white/20 text-white/60 hover:text-white"

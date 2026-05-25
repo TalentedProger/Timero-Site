@@ -11,6 +11,7 @@ import { MinimalMode } from "@/components/panels/MinimalMode";
 import { useSettings } from "@/hooks/useSettings";
 import { useTimer } from "@/hooks/useTimer";
 import { useHistory } from "@/hooks/useHistory";
+import { useImagePreloader } from "@/hooks/useImagePreloader";
 import { calculateStats } from "@/lib/stats";
 import { backgrounds } from "@/lib/backgrounds";
 import { getFontCss } from "@/lib/fonts";
@@ -23,7 +24,7 @@ const BackgroundImage = memo(({ bgImage, dimOpacity }: { bgImage: string; dimOpa
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1.2 }}
+      transition={{ duration: 0.8 }}
       className="absolute inset-0 z-0"
     >
       <img 
@@ -32,6 +33,7 @@ const BackgroundImage = memo(({ bgImage, dimOpacity }: { bgImage: string; dimOpa
         className="w-full h-full object-cover"
         loading="eager"
         decoding="async"
+        fetchPriority="high"
       />
       <div
         className="absolute inset-0 transition-opacity duration-500"
@@ -55,6 +57,10 @@ export default function TimerPage() {
 
   const timer = useTimer(settings.defaultDuration);
   const stats = useMemo(() => calculateStats(history), [history]);
+
+  // Preload all background images for instant switching
+  const backgroundUrls = useMemo(() => backgrounds.map(bg => bg.url), []);
+  useImagePreloader(backgroundUrls);
 
   // Resolve background URL — handles "custom" id
   const bgImage = useMemo(() =>

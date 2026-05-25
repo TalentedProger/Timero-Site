@@ -181,11 +181,11 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 24 }}
             transition={{ type: "spring", damping: 30, stiffness: 340 }}
-            className="fixed z-50 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 top-1/2 -translate-y-1/2 w-full sm:w-[420px]"
+            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] max-w-[420px] max-h-[85vh] overflow-y-auto"
           >
             {/* Main glass card — same surface as LeftPanel */}
             <div
-              className="rounded-3xl overflow-hidden border border-white/8"
+              className="rounded-2xl sm:rounded-3xl overflow-hidden border border-white/8"
               style={{
                 background: "rgba(8,8,18,0.75)",
                 backdropFilter: "blur(32px)",
@@ -194,7 +194,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
               }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 pt-5 pb-4">
+              <div className="flex items-center justify-between px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4">
                 <div className="flex items-center gap-2 text-white/90">
                   <Clock className="w-4 h-4" />
                   <span className="text-base font-semibold tracking-wide">{t.setDuration}</span>
@@ -205,9 +205,9 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
               </div>
 
               {/* Task name — glass pill */}
-              <div className="px-5 pb-5">
+              <div className="px-4 sm:px-5 pb-3 sm:pb-5">
                 <div
-                  className="flex items-center px-4 py-3.5 rounded-2xl transition-all"
+                  className="flex items-center px-3 sm:px-4 py-2.5 sm:py-3.5 rounded-xl sm:rounded-2xl transition-all"
                   style={{
                     background: "rgba(255,255,255,0.06)",
                     border: "1px solid rgba(255,255,255,0.10)",
@@ -227,7 +227,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
 
               {/* Wheels */}
               <div
-                className="mx-5 mb-4 rounded-2xl overflow-hidden"
+                className="mx-4 sm:mx-5 mb-3 sm:mb-4 rounded-xl sm:rounded-2xl overflow-hidden"
                 style={{
                   background: "rgba(255,255,255,0.04)",
                   border: "1px solid rgba(255,255,255,0.07)",
@@ -247,7 +247,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
               </div>
 
               {/* Quick adds */}
-              <div className="px-5 pb-4 space-y-2">
+              <div className="px-4 sm:px-5 pb-3 sm:pb-4 space-y-2">
                 <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.quickAdd}</p>
                 <div className="flex gap-2">
                   {QUICK_ADDS.map((q) => (
@@ -271,7 +271,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
               </div>
 
               {/* Presets */}
-              <div className="px-5 pb-4 space-y-2">
+              <div className="px-4 sm:px-5 pb-3 sm:pb-4 space-y-2">
                 <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
                 <div className="flex flex-wrap gap-2">
                   {PRESET_TEMPLATES.map((p) => {
@@ -296,7 +296,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
 
               {/* Recent */}
               {recentTimers.length > 0 && (
-                <div className="px-5 pb-4 space-y-2">
+                <div className="px-4 sm:px-5 pb-3 sm:pb-4 space-y-2">
                   <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.recent}</p>
                   <div className="flex flex-wrap gap-2">
                     {recentTimers.map((secs) => (
@@ -314,7 +314,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
               )}
 
               {/* Confirm */}
-              <div className="px-5 pb-5 pt-1">
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-1">
                 <button
                   onClick={() => { if (totalSeconds >= 60) { onConfirm(totalSeconds); onClose(); } }}
                   disabled={totalSeconds < 60}

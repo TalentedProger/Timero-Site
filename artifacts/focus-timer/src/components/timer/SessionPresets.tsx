@@ -1,13 +1,22 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/hooks/useSettings";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SessionPresetsProps {
   onSelectPreset: (durationSeconds: number) => void;
   activeDuration: number;
 }
 
-const PRESETS = [
+const PRESETS_MOBILE = [
+  { label: "5m", seconds: 5 * 60 },
+  { label: "15m", seconds: 15 * 60 },
+  { label: "25m", seconds: 25 * 60 },
+  { label: "45m", seconds: 45 * 60 },
+  { label: "1h", seconds: 60 * 60 },
+];
+
+const PRESETS_DESKTOP = [
   { label: "5m", seconds: 5 * 60 },
   { label: "15m", seconds: 15 * 60 },
   { label: "25m", seconds: 25 * 60 },
@@ -19,6 +28,10 @@ const PRESETS = [
 export function SessionPresets({ onSelectPreset, activeDuration }: SessionPresetsProps) {
   const { settings } = useSettings();
   const accent = settings.accentColor;
+  const isMobile = useIsMobile();
+
+  // Use mobile presets on small screens
+  const presets = isMobile ? PRESETS_MOBILE : PRESETS_DESKTOP;
 
   return (
     <motion.div
@@ -27,7 +40,7 @@ export function SessionPresets({ onSelectPreset, activeDuration }: SessionPreset
       transition={{ duration: 0.5, delay: 0.1 }}
       className="flex flex-wrap items-center justify-center gap-2"
     >
-      {PRESETS.map((preset, i) => {
+      {presets.map((preset, i) => {
         const isActive = activeDuration === preset.seconds;
         return (
           <motion.button

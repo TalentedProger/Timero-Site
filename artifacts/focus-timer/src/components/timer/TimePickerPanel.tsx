@@ -234,7 +234,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
                   <Clock className="w-4 h-4" />
                   <span className="text-base font-semibold tracking-wide">{t.setDuration}</span>
                 </div>
-                <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/8 transition-colors text-white/35 hover:text-white">
+                <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/8 transition-colors text-white/35 hover:text-white">
                   <X className="w-4 h-4" />
                 </button>
               </div>

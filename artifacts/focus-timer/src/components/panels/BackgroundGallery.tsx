@@ -98,7 +98,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
               </motion.button>
               <button
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/50 hover:text-white"
+                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white/50 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>

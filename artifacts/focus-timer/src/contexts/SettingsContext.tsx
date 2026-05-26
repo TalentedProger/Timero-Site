@@ -42,8 +42,8 @@ const defaultSettings: Settings = {
   timeFormat: "24h",
   accentColor: "#8b5cf6",
   backgroundDim: 38,
-  language: "en",
-  fontFamily: "inter",
+  language: "ru",
+  fontFamily: "dm-sans",
 };
 
 interface SettingsContextValue {

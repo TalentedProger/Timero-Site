@@ -77,7 +77,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
       >
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/8">
           <h2 className="text-base font-semibold text-white/90 tracking-wide">{t.appearance}</h2>
-          <button onClick={onClose} className="p-2 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white/50 hover:text-white">
+          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white/50 hover:text-white">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -223,7 +223,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                       </button>
                       <button
                         onClick={() => playSound(opt.id, settings.volume, 1, 1)}
-                        className="p-1.5 rounded-lg hover:bg-white/10 text-white/35 hover:text-white transition-colors"
+                        className="flex items-center justify-center w-7 h-7 rounded-lg hover:bg-white/10 text-white/35 hover:text-white transition-colors"
                       >
                         <Play className="w-3 h-3" />
                       </button>

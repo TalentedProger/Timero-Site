@@ -63,7 +63,7 @@ export function BottomDock({
         <button
           onClick={onToggleLeft}
           className={cn(
-            "p-1.5 sm:p-2 rounded-full transition-all duration-200 hover:bg-white/10",
+            "w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-white/10",
             isLeftOpen ? "text-white bg-white/15" : "text-white/55"
           )}
         >
@@ -73,7 +73,7 @@ export function BottomDock({
         {/* Minimal */}
         <button
           onClick={onToggleMinimal}
-          className="p-1.5 sm:p-2 rounded-full transition-all duration-200 hover:bg-white/10 text-white/55 hover:text-white"
+          className="w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-white/10 text-white/55 hover:text-white"
         >
           <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
@@ -82,7 +82,7 @@ export function BottomDock({
         <button
           onClick={onToggleRight}
           className={cn(
-            "p-1.5 sm:p-2 rounded-full transition-all duration-200 hover:bg-white/10",
+            "w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-white/10",
             isRightOpen ? "text-white bg-white/15" : "text-white/55"
           )}
         >

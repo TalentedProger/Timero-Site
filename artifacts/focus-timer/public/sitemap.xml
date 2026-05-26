@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Главная страница - Таймер Онлайн -->
   <url>
     <loc>https://timero.ru/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2024-01-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://timero.ru/?lang=ru" />
     <xhtml:link rel="alternate" hreflang="en" href="https://timero.ru/?lang=en" />
+    <image:image>
+      <image:loc>https://timero.ru/opengraph.jpg</image:loc>
+      <image:title>Таймер Онлайн Бесплатно - Timero</image:title>
+      <image:caption>Бесплатный онлайн таймер помодоро для фокуса и учебы</image:caption>
+    </image:image>
   </url>
 </urlset>

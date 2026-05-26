@@ -1,21 +1,41 @@
-# Premium Focus Timer - Robots.txt
+# Timero - Таймер Онлайн - Robots.txt
+# Обновлено для оптимальной индексации в Яндекс и Google
+
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /*.json$
+Disallow: /admin/
+Disallow: /private/
 
 # Sitemap
 Sitemap: https://timero.ru/sitemap.xml
 
-# Crawl-delay for respectful crawling
+# Crawl-delay для уважительного краулинга
 Crawl-delay: 1
 
-# Specific bot rules
+# Яндекс
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+# Google
 User-agent: Googlebot
 Allow: /
 
-User-agent: Yandex
-Allow: /
-
+# Bing
 User-agent: Bingbot
 Allow: /
+
+# Запрет для плохих ботов
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /

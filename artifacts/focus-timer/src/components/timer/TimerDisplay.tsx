@@ -147,13 +147,13 @@ export function TimerDisplay({
         onTouchEnd={stopHold}
         disabled={isActive}
         className={cn(
-          "w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
+          "w-10 h-10 sm:w-11 sm:h-11 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
           isActive
             ? "opacity-0 pointer-events-none"
             : "opacity-100 hover:bg-white/12 hover:border-white/20 text-white/60 hover:text-white"
         )}
       >
-        <Minus className="w-4 h-4" />
+        <Minus className="w-4 h-4" strokeWidth={2.5} />
       </motion.button>
 
       {/* Ring + digits */}
@@ -241,13 +241,13 @@ export function TimerDisplay({
         onTouchEnd={stopHold}
         disabled={isActive}
         className={cn(
-          "w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
+          "w-10 h-10 sm:w-11 sm:h-11 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
           isActive
             ? "opacity-0 pointer-events-none"
             : "opacity-100 hover:bg-white/12 hover:border-white/20 text-white/60 hover:text-white"
         )}
       >
-        <Plus className="w-4 h-4" />
+        <Plus className="w-4 h-4" strokeWidth={2.5} />
       </motion.button>
     </div>
   );

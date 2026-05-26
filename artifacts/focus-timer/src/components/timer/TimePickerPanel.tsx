@@ -69,12 +69,23 @@ function WheelPicker({
     }, 80);
   }, [max, onChange]);
 
+  // Handle mouse wheel scroll - scroll by 1 item at a time
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 1 : -1;
+    const newValue = Math.max(0, Math.min(max, value + delta));
+    if (newValue !== value) {
+      onChange(newValue);
+    }
+  }, [value, max, onChange]);
+
   return (
     <div className="flex flex-col items-center gap-2">
       <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{label}</span>
       <div className="relative" style={{ height: VISIBLE * ITEM_H, width: 88 }}>
         <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none rounded-t-xl" />
         <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none rounded-b-xl" />
+        {/* Active element highlight - centered (3rd element) */}
         <div
           className="absolute inset-x-2 z-20 pointer-events-none rounded-xl"
           style={{ top: PADDING * ITEM_H, height: ITEM_H, background: `${accent}14`, border: `1px solid ${accent}30` }}
@@ -82,6 +93,7 @@ function WheelPicker({
         <div
           ref={containerRef}
           onScroll={handleScroll}
+          onWheel={handleWheel}
           className="overflow-y-scroll h-full"
           style={{ scrollSnapType: "y mandatory", scrollbarWidth: "none" }}
         >

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Play, Pause, RotateCcw, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/hooks/useSettings";
+import { initAudio } from "@/lib/sounds";
 
 interface TimerControlsProps {
   isActive: boolean;
@@ -48,7 +49,10 @@ export function TimerControls({
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={isActive ? onPause : onStart}
+        onClick={() => {
+          initAudio();
+          isActive ? onPause() : onStart();
+        }}
         data-testid="button-play-pause"
         className="w-20 h-20 rounded-full flex items-center justify-center transition-all"
         style={{

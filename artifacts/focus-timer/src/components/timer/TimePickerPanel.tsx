@@ -16,7 +16,7 @@ interface TimePickerPanelProps {
 }
 
 const ITEM_H = 60;
-const VISIBLE = 5;
+const VISIBLE = 3;
 const PADDING = Math.floor(VISIBLE / 2);
 
 const PRESET_TEMPLATES = [
@@ -107,9 +107,9 @@ function WheelPicker({
     <div className="flex flex-col items-center gap-2">
       <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{label}</span>
       <div className="relative" style={{ height: VISIBLE * ITEM_H, width: 88 }}>
-        <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none rounded-t-xl" />
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/50 to-transparent z-10 pointer-events-none rounded-b-xl" />
-        {/* Active element highlight - centered (3rd element) */}
+        <div className="absolute top-0 inset-x-0 h-12 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none rounded-t-xl" />
+        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-black/60 to-transparent z-10 pointer-events-none rounded-b-xl" />
+        {/* Active element highlight - centered */}
         <div
           className="absolute inset-x-2 z-20 pointer-events-none rounded-xl"
           style={{ top: PADDING * ITEM_H, height: ITEM_H, background: `${accent}14`, border: `1px solid ${accent}30` }}
@@ -216,7 +216,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 24 }}
             transition={{ type: "spring", damping: 30, stiffness: 340 }}
-            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] max-w-[420px] max-h-[85vh] overflow-y-auto"
+            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[80%] max-w-[420px] max-h-[80dvh] overflow-y-auto"
           >
             {/* Main glass card — same surface as LeftPanel */}
             <div

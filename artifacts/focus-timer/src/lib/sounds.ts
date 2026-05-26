@@ -1,10 +1,44 @@
+let audioCtx: AudioContext | null = null;
+
+export const initAudio = () => {
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  if (!audioCtx) {
+    audioCtx = new AudioContextClass();
+  }
+
+  // Resume context if suspended (required by autoplay policies)
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(err => console.warn("Failed to resume AudioContext:", err));
+  }
+
+  // Play a silent short buffer to completely unlock audio on iOS/Safari
+  try {
+    const buffer = audioCtx.createBuffer(1, 1, 22050);
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioCtx.destination);
+    source.start(0);
+  } catch (e) {
+    // Ignore buffer errors
+  }
+};
+
 export const playSound = (type: string, volume: number, repeatCount: number = 1, playDuration: number = 2) => {
-  // Web Audio API context setup
-  const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-  if (!AudioContext) return;
+  if (!audioCtx) {
+    initAudio();
+  }
+  if (!audioCtx) return;
+
+  // Best effort resume if it's still suspended
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(() => {});
+  }
   
   const playSingleSound = (delayTime: number = 0) => {
-    const ctx = new AudioContext();
+    // Use the global context
+    const ctx = audioCtx!;
     const gainNode = ctx.createGain();
     // Map volume 0-100 to 0-1
     gainNode.gain.value = volume / 100;

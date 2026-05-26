@@ -185,12 +185,12 @@ export default function TimerPage() {
       )}
 
       {/* Main stage */}
-      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4">
+      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4 pb-24 sm:pb-0">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="flex flex-col items-center w-full max-w-3xl gap-6"
+          className="flex flex-col items-center w-full max-w-3xl gap-4 sm:gap-6"
         >
           <SessionPresets
             activeDuration={timer.duration}

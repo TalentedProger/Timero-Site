@@ -5,6 +5,7 @@ import { SettingsProvider } from "@/contexts/SettingsContext";
 import { HistoryProvider } from "@/contexts/HistoryContext";
 import { useSettings } from "@/hooks/useSettings";
 import { getFontCss } from "@/lib/fonts";
+import { initAudio } from "@/lib/sounds";
 
 // Lazy load pages for better performance
 const TimerPage = lazy(() => import("@/pages/TimerPage"));
@@ -58,6 +59,22 @@ function Router() {
 }
 
 function App() {
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      initAudio();
+      window.removeEventListener("pointerdown", handleFirstInteraction);
+      window.removeEventListener("keydown", handleFirstInteraction);
+    };
+
+    window.addEventListener("pointerdown", handleFirstInteraction);
+    window.addEventListener("keydown", handleFirstInteraction);
+
+    return () => {
+      window.removeEventListener("pointerdown", handleFirstInteraction);
+      window.removeEventListener("keydown", handleFirstInteraction);
+    };
+  }, []);
+
   return (
     <HelmetProvider>
       <SettingsProvider>

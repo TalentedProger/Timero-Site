@@ -140,11 +140,14 @@ export function TimerDisplay({
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.93 }}
-        onMouseDown={() => startHold(-60)}
-        onMouseUp={stopHold}
-        onMouseLeave={stopHold}
-        onTouchStart={() => startHold(-60)}
-        onTouchEnd={stopHold}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          startHold(-60);
+        }}
+        onPointerUp={stopHold}
+        onPointerLeave={stopHold}
+        onPointerCancel={stopHold}
+        onContextMenu={(e) => e.preventDefault()}
         disabled={isActive}
         className={cn(
           "w-10 h-10 sm:w-11 sm:h-11 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
@@ -234,11 +237,14 @@ export function TimerDisplay({
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.93 }}
-        onMouseDown={() => startHold(60)}
-        onMouseUp={stopHold}
-        onMouseLeave={stopHold}
-        onTouchStart={() => startHold(60)}
-        onTouchEnd={stopHold}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          startHold(60);
+        }}
+        onPointerUp={stopHold}
+        onPointerLeave={stopHold}
+        onPointerCancel={stopHold}
+        onContextMenu={(e) => e.preventDefault()}
         disabled={isActive}
         className={cn(
           "w-10 h-10 sm:w-11 sm:h-11 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",

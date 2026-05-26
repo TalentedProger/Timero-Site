@@ -40,7 +40,7 @@ export function RightPanel({ isOpen, onClose }: RightPanelProps) {
     >
       <div className="flex items-center justify-between px-6 py-5 border-b border-white/8">
         <h2 className="text-base font-semibold text-white/90 tracking-wide">{t.activity}</h2>
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/50 hover:text-white">
+        <button onClick={onClose} className="p-2 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white/50 hover:text-white">
           <X className="w-4 h-4" />
         </button>
       </div>

@@ -47,14 +47,14 @@ function WheelPicker({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    el.scrollTop = (PADDING + value) * ITEM_H;
+    el.scrollTop = value * ITEM_H;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el || isScrolling.current) return;
-    el.scrollTo({ top: (PADDING + value) * ITEM_H, behavior: "smooth" });
+    el.scrollTo({ top: value * ITEM_H, behavior: "smooth" });
   }, [value]);
 
   const handleScroll = useCallback(() => {
@@ -63,21 +63,45 @@ function WheelPicker({
     isScrolling.current = true;
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      const raw = Math.round(el.scrollTop / ITEM_H) - PADDING;
+      const raw = Math.round(el.scrollTop / ITEM_H);
       onChange(Math.max(0, Math.min(max, raw)));
       isScrolling.current = false;
     }, 80);
   }, [max, onChange]);
 
-  // Handle mouse wheel scroll - scroll by 1 item at a time
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? 1 : -1;
-    const newValue = Math.max(0, Math.min(max, value + delta));
-    if (newValue !== value) {
-      onChange(newValue);
-    }
-  }, [value, max, onChange]);
+  // Handle mouse wheel natively to prevent default scroll and skip by exactly 1
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    let wheelTimeout: ReturnType<typeof setTimeout>;
+
+    const handleNativeWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      
+      // Debounce the wheel event so one physical tick = one step
+      if (wheelTimeout) return;
+      
+      const delta = e.deltaY > 0 ? 1 : -1;
+      
+      // We must read the latest state. Since value is captured in hook closure,
+      // we can read it directly from the current scrollTop instead or use a tiny timeout.
+      const currentVal = Math.round(el.scrollTop / ITEM_H);
+      const newValue = Math.max(0, Math.min(max, currentVal + delta));
+      
+      if (newValue !== currentVal) {
+        onChange(newValue);
+      }
+      
+      wheelTimeout = setTimeout(() => {
+        // @ts-ignore
+        wheelTimeout = null;
+      }, 50); // cooldown between ticks
+    };
+
+    el.addEventListener("wheel", handleNativeWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleNativeWheel);
+  }, [max, onChange]);
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -93,7 +117,6 @@ function WheelPicker({
         <div
           ref={containerRef}
           onScroll={handleScroll}
-          onWheel={handleWheel}
           className="overflow-y-scroll h-full"
           style={{ scrollSnapType: "y mandatory", scrollbarWidth: "none" }}
         >
@@ -107,7 +130,7 @@ function WheelPicker({
                 key={item}
                 onClick={() => {
                   onChange(item);
-                  containerRef.current?.scrollTo({ top: (PADDING + item) * ITEM_H, behavior: "smooth" });
+                  containerRef.current?.scrollTo({ top: item * ITEM_H, behavior: "smooth" });
                 }}
                 style={{ height: ITEM_H, scrollSnapAlign: "center" }}
                 className={cn(

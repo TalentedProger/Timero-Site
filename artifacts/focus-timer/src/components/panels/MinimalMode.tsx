@@ -55,7 +55,7 @@ export function MinimalMode({ isActive, onExit, timeLeft, isTimerActive, onToggl
 
             <button
               onClick={onToggleTimer}
-              className="mt-8 p-4 rounded-full backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20"
+              className="mt-8 p-4 rounded-full flex items-center justify-center backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20"
               style={{ background: "rgba(255,255,255,0.10)" }}
             >
               {isTimerActive

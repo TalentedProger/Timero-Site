@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { SEOSection } from "@/components/seo/SEOSection";
+import { SEOFooter } from "@/components/seo/SEOFooter";
+import { seoConfig } from "@/config/seo";
 import { TimerDisplay } from "@/components/timer/TimerDisplay";
 import { TimerControls } from "@/components/timer/TimerControls";
 import { SessionPresets } from "@/components/timer/SessionPresets";
@@ -25,7 +30,7 @@ const BackgroundImage = memo(({ bgImage, dimOpacity }: { bgImage: string; dimOpa
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
-      className="absolute inset-0 z-0"
+      className="fixed inset-0 z-0"
     >
       <img 
         src={bgImage} 
@@ -48,6 +53,13 @@ BackgroundImage.displayName = 'BackgroundImage';
 export default function TimerPage() {
   const { settings, setSettings } = useSettings();
   const { addSession, history } = useHistory();
+  const location = useLocation();
+
+  // Find SEO config based on current path
+  const currentPath = location.pathname.replace(/\/$/, '') || "/";
+  const currentSeoConfig = Object.values(seoConfig).find(
+    (config) => config.path === currentPath
+  ) || seoConfig.home;
 
   const [taskName, setTaskName] = useState("");
   const [isLeftOpen, setIsLeftOpen] = useState(false);
@@ -134,11 +146,30 @@ export default function TimerPage() {
 
   const fontFamily = useMemo(() => getFontCss(settings.fontFamily), [settings.fontFamily]);
 
+  // Set the timer duration when visiting a specific cluster page for the first time
+  useEffect(() => {
+    if (currentSeoConfig.preset && timer.duration === 25 * 60 && !timer.isActive && timer.timeLeft === timer.duration) {
+      if (currentSeoConfig.preset !== settings.defaultDuration && currentSeoConfig.preset !== 25 * 60) {
+        setSettings({ defaultDuration: currentSeoConfig.preset });
+        timer.reset(currentSeoConfig.preset);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSeoConfig.preset]);
+
   return (
     <div
-      className="relative min-h-[100dvh] w-full overflow-hidden bg-black text-white"
+      className="relative min-h-[100dvh] w-full bg-black text-white overflow-y-auto overflow-x-hidden"
       style={{ fontFamily }}
     >
+      <SEOHead 
+        title={currentSeoConfig.title}
+        description={currentSeoConfig.description}
+        keywords={currentSeoConfig.keywords}
+        canonicalUrl={currentSeoConfig.path === "/" ? "/" : `${currentSeoConfig.path}/`}
+        h1={currentSeoConfig.h1}
+      />
+
       <BackgroundImage bgImage={bgImage} dimOpacity={dimOpacity} />
 
       {/* Top-right — total focused today */}
@@ -186,6 +217,10 @@ export default function TimerPage() {
           />
         </motion.div>
       </main>
+
+      {/* SEO Content Section and Footer (scrollable) */}
+      <SEOSection currentPath={currentSeoConfig.path} />
+      <SEOFooter />
 
       <LeftPanel isOpen={isLeftOpen} onClose={() => setIsLeftOpen(false)} />
       <RightPanel isOpen={isRightOpen} onClose={() => setIsRightOpen(false)} />

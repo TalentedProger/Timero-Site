@@ -1,5 +1,6 @@
 import { useEffect, lazy, Suspense } from "react";
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 import { HistoryProvider } from "@/contexts/HistoryContext";
 import { useSettings } from "@/hooks/useSettings";
@@ -40,24 +41,34 @@ function LoadingFallback() {
 function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <Switch>
-        <Route path="/" component={TimerPage} />
-        <Route component={NotFound} />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<TimerPage />} />
+        <Route path="/pomodoro" element={<TimerPage />} />
+        <Route path="/focus-timer" element={<TimerPage />} />
+        <Route path="/study-timer" element={<TimerPage />} />
+        <Route path="/work-timer" element={<TimerPage />} />
+        <Route path="/interval-timer" element={<TimerPage />} />
+        <Route path="/minimal-timer" element={<TimerPage />} />
+        <Route path="/sound-timer" element={<TimerPage />} />
+        <Route path="/faq" element={<TimerPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </Suspense>
   );
 }
 
 function App() {
   return (
-    <SettingsProvider>
-      <HistoryProvider>
-        <FontInjector />
-        <WouterRouter>
-          <Router />
-        </WouterRouter>
-      </HistoryProvider>
-    </SettingsProvider>
+    <HelmetProvider>
+      <SettingsProvider>
+        <HistoryProvider>
+          <FontInjector />
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
+        </HistoryProvider>
+      </SettingsProvider>
+    </HelmetProvider>
   );
 }
 

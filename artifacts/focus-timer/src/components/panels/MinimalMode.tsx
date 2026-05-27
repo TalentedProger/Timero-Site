@@ -4,6 +4,7 @@ import { Pause, Play, ArrowLeft } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { getT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { backgrounds } from "@/lib/backgrounds";
 
 interface MinimalModeProps {
   isActive: boolean;
@@ -17,6 +18,11 @@ export function MinimalMode({ isActive, onExit, timeLeft, isTimerActive, onToggl
   const { settings } = useSettings();
   const t = getT(settings.language);
   const accent = settings.accentColor;
+
+  // Determine current background image
+  const bgImage = settings.selectedBackground === "custom" 
+    ? settings.customBackgroundUrl 
+    : backgrounds.find((b) => b.id === settings.selectedBackground)?.url || backgrounds[0].url;
 
   const hours = Math.floor(timeLeft / 3600);
   const mins = Math.floor((timeLeft % 3600) / 60);
@@ -56,10 +62,23 @@ export function MinimalMode({ isActive, onExit, timeLeft, isTimerActive, onToggl
           transition={{ duration: 0.4 }}
           className={cn(
             "fixed inset-0 z-[100] flex items-center justify-center cursor-pointer",
-            settings.minimalModeBg === "blur" ? "bg-black/50 backdrop-blur-sm" : "bg-black/20"
+            settings.minimalModeBg === "blur" ? "bg-black/50 backdrop-blur-sm" : "bg-black"
           )}
           onClick={onExit}
         >
+          {settings.minimalModeBg === "image" && (
+            <div className="absolute inset-0 z-[-1]">
+              <img 
+                src={bgImage} 
+                alt="background" 
+                className="w-full h-full object-cover"
+              />
+              <div
+                className="absolute inset-0"
+                style={{ background: `rgba(0,0,0,${settings.backgroundDim / 100})` }}
+              />
+            </div>
+          )}
           <div className="flex flex-col items-center w-full h-full justify-center relative" onClick={(e) => e.stopPropagation()}>
             <motion.span
               className={cn("text-[25vw] sm:text-[18vw] leading-none font-extralight tracking-tighter text-white tabular-nums drop-shadow-2xl select-none", fontClass)}

@@ -1,6 +1,6 @@
 # Timero - Онлайн Таймер Помодоро
 # Production-ready robots.txt
-# Обновлено: 2025-01-27
+# Обновлено: 2026-05-27
 
 User-agent: *
 Allow: /

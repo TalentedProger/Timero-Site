@@ -178,20 +178,8 @@ export default function TimerPage() {
 
       <BackgroundImage bgImage={bgImage} dimOpacity={dimOpacity} />
 
-      {/* Top-right — total focused today */}
-      {stats.totalFocusMinutes > 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="absolute top-6 right-8 z-20 text-xs font-medium text-white/40 tracking-widest uppercase"
-        >
-          {formatTotalTime(stats.totalFocusMinutes)}
-        </motion.div>
-      )}
-
       {/* Main stage */}
-      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4 py-16 sm:py-0">
+      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4 pb-24 sm:pb-0">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}

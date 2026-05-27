@@ -69,10 +69,10 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
       {isOpen && (
         <motion.div
           key="bg-gallery"
-          initial={{ opacity: 0, x: "-100%" }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: "-100%" }}
-          transition={{ type: "spring", damping: 28, stiffness: 240 }}
+          initial={{ opacity: 0, scale: 0.98, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.98, y: 10 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[60] flex flex-col"
           style={{
             background: "rgba(6,6,16,0.96)",
@@ -96,12 +96,18 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
               >
                 {t.save}
               </motion.button>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={onClose}
-                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white/50 hover:text-white"
+                className="w-9 h-9 rounded-full flex items-center justify-center transition-all text-white"
+                style={{
+                  background: accent,
+                  boxShadow: `0 0 20px ${accent}55`,
+                }}
               >
-                <X className="w-4 h-4" />
-              </button>
+                <X className="w-4 h-4" strokeWidth={2.5} />
+              </motion.button>
             </div>
           </div>
 

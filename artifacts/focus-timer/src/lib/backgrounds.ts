@@ -13,7 +13,8 @@ export const backgrounds: Background[] = [
   { id: "forest",     name: "Forest",     category: "nature",       url: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1920&q=80" },
   { id: "mountains",  name: "Mountains",  category: "nature",       url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" },
   { id: "sea",        name: "Sea",        category: "nature",       url: "/sea.jpg" },
-  { id: "roadtrip",   name: "Road Trip",  category: "nature",       url: "/road trip.jpg" },
+  { id: "roadtrip",   name: "Road Trip",  category: "nature",       url: "/road_trip.jpg" },
+  { id: "lake",       name: "Lake",       category: "nature",       url: "/lake.jpg" },
   { id: "waterfall",  name: "Waterfall",  category: "nature",       url: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1920&q=80" },
   { id: "beach",      name: "Beach",      category: "nature",       url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80" },
   { id: "meadow",     name: "Meadow",     category: "nature",       url: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=80" },
@@ -33,7 +34,7 @@ export const backgrounds: Background[] = [
   { id: "porsche",    name: "Porsche",    category: "abstract",     url: "/porsche.jpg" },
   { id: "minimal",    name: "Minimal",    category: "abstract",     url: "https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=80" },
   { id: "gradient",   name: "Gradient",   category: "abstract",     url: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=1920&q=80" },
-  { id: "wallpaper",  name: "Wallpaper",  category: "abstract",     url: "/walpapper (1).jpg" },
+  { id: "wallpaper",  name: "Wallpaper",  category: "abstract",     url: "/wallpaper.jpg" },
   // Dark
   { id: "night-city", name: "Night City", category: "dark",         url: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&q=80" },
   { id: "storm",      name: "Storm",      category: "dark",         url: "https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=1920&q=80" },

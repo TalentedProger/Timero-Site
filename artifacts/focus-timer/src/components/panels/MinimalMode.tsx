@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Pause, Play } from "lucide-react";
+import { Pause, Play, ArrowLeft } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { getT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -69,6 +69,13 @@ export function MinimalMode({ isActive, onExit, timeLeft, isTimerActive, onToggl
               {formattedTime}
             </motion.span>
 
+            <button
+              onClick={onExit}
+              className="absolute top-6 left-6 p-3 sm:p-5 rounded-full flex items-center justify-center backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20 z-10"
+              style={{ background: "rgba(255,255,255,0.10)" }}
+            >
+              <ArrowLeft className="w-5 h-5 sm:w-8 sm:h-8" />
+            </button>
             <button
               onClick={onToggleTimer}
               className="absolute top-6 right-6 sm:static sm:mt-12 p-3 sm:p-5 rounded-full flex items-center justify-center backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20 z-10"

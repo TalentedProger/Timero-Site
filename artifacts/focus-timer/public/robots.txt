@@ -1,41 +1,22 @@
-# Timero - Таймер Онлайн - Robots.txt
-# Обновлено для оптимальной индексации в Яндекс и Google
+# Timero - Онлайн Таймер Помодоро
+# Production-ready robots.txt
+# Обновлено: 2025-01-27
 
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /*.json$
 Disallow: /admin/
 Disallow: /private/
 
 # Sitemap
 Sitemap: https://timero.ru/sitemap.xml
 
-# Crawl-delay для уважительного краулинга
-Crawl-delay: 1
-
-# Яндекс
-User-agent: Yandex
-Allow: /
-Crawl-delay: 1
-
-# Google
+# Основные поисковые системы
 User-agent: Googlebot
 Allow: /
 
-# Bing
-User-agent: Bingbot
+User-agent: Yandex
 Allow: /
 
-# Запрет для плохих ботов
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: MJ12bot
-Disallow: /
-
-User-agent: DotBot
-Disallow: /
+User-agent: Bingbot
+Allow: /

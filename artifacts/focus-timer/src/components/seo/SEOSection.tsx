@@ -1,10 +1,13 @@
 import { seoConfig } from "@/config/seo";
+import { faqData } from "@/config/faq";
 
 export function SEOSection({ currentPath }: { currentPath: string }) {
   const config = Object.values(seoConfig).find(c => c.path === currentPath) || seoConfig.home;
+  const pageKey = currentPath === "/" ? "home" : currentPath.replace("/", "").replace(/-/g, "");
+  const faqs = faqData[pageKey] || faqData.home;
 
   return (
-    <section className="relative z-20 w-full max-w-4xl mx-auto px-6 pt-24 pb-12 mt-12 text-white/80 text-center">
+    <section className="relative z-20 w-full max-w-4xl mx-auto px-6 pt-24 pb-12 mt-12 text-white/80">
       <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-3xl shadow-2xl">
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-6">
           {config.h1}
@@ -42,23 +45,16 @@ export function SEOSection({ currentPath }: { currentPath: string }) {
           </div>
         )}
 
-        {config.path === "/faq" && (
-          <div className="text-left mt-12 space-y-8 text-sm text-white/70">
-            <h2 className="text-white font-medium text-2xl mb-6">Частые вопросы</h2>
-            <div>
-              <h3 className="text-white text-lg font-medium">Как пользоваться онлайн таймером?</h3>
-              <p className="mt-2">Выберите время из быстрых пресетов (5м, 15м, 25м, 45м, 1ч) или установите свое время. Нажмите кнопку Play для запуска таймера. Когда время истечет, прозвучит звуковой сигнал. Таймер работает прямо в браузере без скачивания.</p>
+        {/* FAQ Section */}
+        <div className="text-left mt-12 space-y-6 text-sm text-white/70 border-t border-white/10 pt-10">
+          <h2 className="text-white font-medium text-2xl mb-6">Часто задаваемые вопросы</h2>
+          {faqs.slice(0, 4).map((faq, index) => (
+            <div key={index} className="bg-white/5 p-6 rounded-xl border border-white/5">
+              <h3 className="text-white text-base font-medium mb-2">{faq.question}</h3>
+              <p className="text-white/60 leading-relaxed">{faq.answer}</p>
             </div>
-            <div>
-              <h3 className="text-white text-lg font-medium">Бесплатен ли таймер?</h3>
-              <p className="mt-2">Да, Timero полностью бесплатный онлайн таймер без регистрации, без рекламы и без скрытых платежей.</p>
-            </div>
-            <div>
-              <h3 className="text-white text-lg font-medium">Работает ли таймер на телефоне?</h3>
-              <p className="mt-2">Да, он оптимизирован под мобильные устройства и планшеты. Главный экран адаптируется под любой размер.</p>
-            </div>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
     </section>
   );

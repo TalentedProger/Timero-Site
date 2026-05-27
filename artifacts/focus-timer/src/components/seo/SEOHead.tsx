@@ -8,6 +8,7 @@ interface SEOHeadProps {
   h1?: string;
   type?: string;
   structuredData?: Record<string, any>[];
+  faqStructuredData?: Record<string, any>;
 }
 
 export function SEOHead({
@@ -16,7 +17,8 @@ export function SEOHead({
   keywords,
   canonicalUrl,
   type = "website",
-  structuredData = []
+  structuredData = [],
+  faqStructuredData
 }: SEOHeadProps) {
   const siteUrl = "https://timero.ru";
   const url = `${siteUrl}${canonicalUrl}`;
@@ -49,13 +51,18 @@ export function SEOHead({
         ...(canonicalUrl !== "/" ? [{
           "@type": "ListItem",
           "position": 2,
-          "name": title.split(" - ")[0] || title,
+          "name": title.split(" - ")[0] || title.split(" | ")[0] || title,
           "item": url
         }] : [])
       ]
     },
     ...structuredData
   ];
+
+  // Add FAQ structured data if provided
+  if (faqStructuredData) {
+    baseStructuredData.push(faqStructuredData);
+  }
 
   return (
     <Helmet>

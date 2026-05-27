@@ -5,6 +5,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { SEOSection } from "@/components/seo/SEOSection";
 import { SEOFooter } from "@/components/seo/SEOFooter";
 import { seoConfig } from "@/config/seo";
+import { generateFAQStructuredData } from "@/config/faq";
 import { TimerDisplay } from "@/components/timer/TimerDisplay";
 import { TimerControls } from "@/components/timer/TimerControls";
 import { SessionPresets } from "@/components/timer/SessionPresets";
@@ -60,6 +61,10 @@ export default function TimerPage() {
   const currentSeoConfig = Object.values(seoConfig).find(
     (config) => config.path === currentPath
   ) || seoConfig.home;
+
+  // Generate FAQ structured data for current page
+  const pageKey = currentPath === "/" ? "home" : currentPath.replace("/", "").replace(/-/g, "");
+  const faqStructuredData = useMemo(() => generateFAQStructuredData(pageKey), [pageKey]);
 
   const [taskName, setTaskName] = useState("");
   const [isLeftOpen, setIsLeftOpen] = useState(false);
@@ -168,6 +173,7 @@ export default function TimerPage() {
         keywords={currentSeoConfig.keywords}
         canonicalUrl={currentSeoConfig.path === "/" ? "/" : `${currentSeoConfig.path}/`}
         h1={currentSeoConfig.h1}
+        faqStructuredData={faqStructuredData}
       />
 
       <BackgroundImage bgImage={bgImage} dimOpacity={dimOpacity} />

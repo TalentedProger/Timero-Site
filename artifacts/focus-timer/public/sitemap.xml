@@ -1,66 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Главная страница - Таймер Онлайн -->
+  <!-- Главная страница -->
   <url>
     <loc>https://timero.ru/</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2025-01-27</lastmod>
     <priority>1.0</priority>
   </url>
+  
   <!-- Таймер Помодоро -->
   <url>
-    <loc>https://timero.ru/pomodoro</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/pomodoro/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.9</priority>
   </url>
+  
   <!-- Focus Timer -->
   <url>
-    <loc>https://timero.ru/focus-timer</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/focus-timer/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.8</priority>
   </url>
+  
   <!-- Таймер для Учебы -->
   <url>
-    <loc>https://timero.ru/study-timer</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/study-timer/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.9</priority>
   </url>
+  
   <!-- Таймер для Работы -->
   <url>
-    <loc>https://timero.ru/work-timer</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/work-timer/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.8</priority>
   </url>
+  
   <!-- Интервальный Таймер -->
   <url>
-    <loc>https://timero.ru/interval-timer</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/interval-timer/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.8</priority>
   </url>
+  
   <!-- Минималистичный Таймер -->
   <url>
-    <loc>https://timero.ru/minimal-timer</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/minimal-timer/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.7</priority>
   </url>
+  
   <!-- Таймер со Звуком -->
   <url>
-    <loc>https://timero.ru/sound-timer</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/sound-timer/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.9</priority>
   </url>
+  
   <!-- FAQ -->
   <url>
-    <loc>https://timero.ru/faq</loc>
-    <lastmod>2024-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://timero.ru/faq/</loc>
+    <lastmod>2025-01-27</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>

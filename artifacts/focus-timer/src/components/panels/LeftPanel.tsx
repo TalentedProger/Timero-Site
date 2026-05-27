@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { X, Image as ImageIcon, Play, ChevronRight, Palette, Type } from "lucide-react";
+import { X, Image as ImageIcon, Play, ChevronRight, Palette, Type, Maximize } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { backgrounds } from "@/lib/backgrounds";
 import { playSound } from "@/lib/sounds";
@@ -332,6 +332,35 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                         Aa
                       </span>
                       <span className="text-[11px] text-white/40">{font.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* ── Fullscreen Mode ── */}
+            <section className="space-y-3 pb-4">
+              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
+                <Maximize className="w-3.5 h-3.5" /> ПОЛНОЭКРАННЫЙ РЕЖИМ
+              </h3>
+              <div className="flex gap-2 bg-white/5 p-1 rounded-xl">
+                {[
+                  { id: "blur", label: "Размытие" },
+                  { id: "image", label: "Фон" }
+                ].map((opt) => {
+                  const isActive = settings.minimalModeBg === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => setSettings({ minimalModeBg: opt.id as "blur" | "image" })}
+                      className="flex-1 py-1.5 rounded-lg text-xs font-medium transition-all"
+                      style={
+                        isActive
+                          ? { background: accent, color: "white", boxShadow: "0 2px 10px rgba(0,0,0,0.2)" }
+                          : { color: "rgba(255,255,255,0.45)" }
+                      }
+                    >
+                      {opt.label}
                     </button>
                   );
                 })}

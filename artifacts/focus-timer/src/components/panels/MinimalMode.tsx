@@ -54,7 +54,10 @@ export function MinimalMode({ isActive, onExit, timeLeft, isTimerActive, onToggl
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center cursor-pointer bg-black/50 backdrop-blur-sm"
+          className={cn(
+            "fixed inset-0 z-[100] flex items-center justify-center cursor-pointer",
+            settings.minimalModeBg === "blur" ? "bg-black/50 backdrop-blur-sm" : "bg-black/20"
+          )}
           onClick={onExit}
         >
           <div className="flex flex-col items-center w-full h-full justify-center relative" onClick={(e) => e.stopPropagation()}>
@@ -71,23 +74,23 @@ export function MinimalMode({ isActive, onExit, timeLeft, isTimerActive, onToggl
 
             <button
               onClick={onExit}
-              className="absolute top-6 left-6 p-3 sm:p-5 rounded-full flex items-center justify-center backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20 z-10"
+              className="absolute top-6 left-6 sm:top-8 sm:left-8 w-11 h-11 sm:w-16 sm:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20 z-10"
               style={{ background: "rgba(255,255,255,0.10)" }}
             >
-              <ArrowLeft className="w-5 h-5 sm:w-8 sm:h-8" />
+              <ArrowLeft className="w-5 h-5 sm:w-7 sm:h-7" />
             </button>
             <button
               onClick={onToggleTimer}
-              className="absolute top-6 right-6 sm:static sm:mt-12 p-3 sm:p-5 rounded-full flex items-center justify-center backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20 z-10"
+              className="absolute top-6 right-6 sm:top-8 sm:right-8 w-11 h-11 sm:w-16 sm:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all border border-white/20 text-white hover:bg-white/20 z-10"
               style={{ background: "rgba(255,255,255,0.10)" }}
             >
               {isTimerActive
-                ? <Pause className="w-5 h-5 sm:w-8 sm:h-8" />
-                : <Play className="w-5 h-5 sm:w-8 sm:h-8 ml-0.5 sm:ml-1" />
+                ? <Pause className="w-5 h-5 sm:w-7 sm:h-7" fill="currentColor" />
+                : <Play className="w-5 h-5 sm:w-7 sm:h-7 ml-0.5 sm:ml-1" fill="currentColor" />
               }
             </button>
 
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/35 text-xs tracking-widest uppercase text-center w-full">
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/35 text-xs tracking-widest uppercase text-center w-full hidden sm:block">
               {t.pressEsc}
             </div>
           </div>

@@ -24,6 +24,7 @@ export interface Settings {
   backgroundDim: number;
   language: string;
   fontFamily: string;
+  minimalModeBg: "blur" | "image";
 }
 
 const defaultSettings: Settings = {
@@ -44,6 +45,7 @@ const defaultSettings: Settings = {
   backgroundDim: 38,
   language: "ru",
   fontFamily: "dm-sans",
+  minimalModeBg: "blur",
 };
 
 interface SettingsContextValue {

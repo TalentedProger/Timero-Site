@@ -218,16 +218,18 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 24 }}
             transition={{ type: "spring", damping: 30, stiffness: 340 }}
-            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[80%] max-w-[420px] max-h-[80dvh] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[80%] max-w-[420px] rounded-2xl sm:rounded-3xl pointer-events-none"
+            style={{
+              boxShadow: "0 24px 60px rgba(0,0,0,0.55)",
+            }}
           >
-            {/* Main glass card — same surface as LeftPanel */}
+            {/* Main glass card */}
             <div
-              className="rounded-2xl sm:rounded-3xl overflow-hidden border border-white/8"
+              className="rounded-2xl sm:rounded-3xl overflow-y-auto max-h-[80dvh] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border border-white/8 pointer-events-auto"
               style={{
                 background: "rgba(8,8,18,0.75)",
                 backdropFilter: "blur(32px)",
                 WebkitBackdropFilter: "blur(32px)",
-                boxShadow: "0 24px 60px rgba(0,0,0,0.55)",
               }}
             >
               {/* Header */}
@@ -308,24 +310,35 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
               </div>
 
               {/* Presets */}
-              <div className="px-4 sm:px-5 pb-3 sm:pb-4 space-y-2">
-                <div className="flex items-center justify-between pb-2">
-                  <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
+              <div className="px-4 sm:px-5 pb-3 sm:pb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[10px] items-center flex font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
                   <button 
                     onClick={() => setShowAllPresets(!showAllPresets)}
-                  className="p-1 rounded-full text-white/30 hover:text-white/70 hover:bg-white/5 transition-colors"
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white/30 hover:text-white/70 bg-white/5 hover:bg-white/10 transition-colors"
                   >
                     <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showAllPresets && "rotate-180")} />
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {(showAllPresets ? PRESET_TEMPLATES.slice(0, 5) : PRESET_TEMPLATES.slice(0, 3)).map((p) => {
+                <div className="flex flex-nowrap sm:flex-wrap overflow-hidden gap-2">
+                  {PRESET_TEMPLATES.map((p, idx) => {
                     const isSel = totalSeconds === p.seconds;
+                    
+                    // Logic to hide/show based on desktop/mobile and showAllPresets
+                    // idx 0, 1: always show
+                    // idx 2: show on desktop by default, or mobile if showAllPresets
+                    // idx > 2: show only if showAllPresets
+                    let displayClass = "flex flex-1 sm:flex-none justify-center";
+                    if (!showAllPresets) {
+                      if (idx === 2) displayClass = "hidden sm:flex sm:flex-none";
+                      if (idx > 2) displayClass = "hidden";
+                    }
+
                     return (
                       <button
                         key={p.label}
                         onClick={() => handlePreset(p.seconds)}
-                        className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                        className={cn("px-2 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium transition-all whitespace-nowrap items-center", displayClass)}
                         style={
                           isSel
                             ? { background: `${accent}22`, border: `1px solid ${accent}55`, color: "rgba(255,255,255,0.9)" }

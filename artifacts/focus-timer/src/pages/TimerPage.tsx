@@ -191,7 +191,7 @@ export default function TimerPage() {
       )}
 
       {/* Main stage */}
-      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4 pb-24 sm:pb-0">
+      <main className="relative z-10 w-full min-h-[100dvh] flex flex-col items-center justify-center px-4 py-16 sm:py-0">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}

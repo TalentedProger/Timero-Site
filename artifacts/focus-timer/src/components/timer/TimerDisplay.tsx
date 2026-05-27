@@ -52,10 +52,8 @@ export function TimerDisplay({
   const progress = duration > 0 ? ((duration - timeLeft) / duration) * 100 : 0;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-  // Urgency glow in last 20%
-  const urgency = progress > 80 ? (progress - 80) / 20 : 0;
-  const strokeColor = urgency > 0 ? `rgba(239,68,68,${0.7 + urgency * 0.3})` : accent;
-  const glowColor = urgency > 0 ? `rgba(239,68,68,${0.2 + urgency * 0.4})` : `${accent}66`;
+  const strokeColor = accent;
+  const glowColor = `${accent}66`;
 
   // Dot position — SVG is CSS-rotated -90deg.
   // Arc starts at SVG 3-o'clock (= visual 12-o'clock after rotation).
@@ -63,7 +61,7 @@ export function TimerDisplay({
   const dotAngle = (progress / 100) * 2 * Math.PI;
   const dotCx = CX + R * Math.cos(dotAngle);
   const dotCy = CY + R * Math.sin(dotAngle);
-  const dotColor = urgency > 0 ? "rgb(239,68,68)" : accent;
+  const dotColor = accent;
 
   // Hold-to-adjust
   const holdRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -133,6 +131,9 @@ export function TimerDisplay({
             : {},
         }
       : {};
+
+  const isReducedFont = ["dm-sans", "montserrat", "inter"].includes(settings.fontFamily);
+  const isPlayfair = settings.fontFamily === "playfair";
 
   return (
     <div className="flex items-center gap-3 sm:gap-8">
@@ -217,6 +218,10 @@ export function TimerDisplay({
               "font-thin tabular-nums tracking-tighter drop-shadow-md select-none leading-none text-white transition-all duration-300",
               fontClass
             )}
+            style={{
+              transform: isReducedFont ? "scale(0.96)" : undefined,
+              marginTop: isPlayfair ? "-0.15em" : undefined
+            }}
           >
             {formattedTime}
           </span>

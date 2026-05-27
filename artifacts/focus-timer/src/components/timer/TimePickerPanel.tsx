@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Plus, Minus, Clock } from "lucide-react";
+import { X, Check, Plus, Minus, Clock, ChevronDown } from "lucide-react";
 import { useHistory } from "@/hooks/useHistory";
 import { useSettings } from "@/hooks/useSettings";
 import { getT } from "@/lib/i18n";
@@ -163,6 +163,8 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
     return m === 0 && Math.floor(currentDuration / 3600) === 0 ? 25 : m;
   });
 
+  const [showAllPresets, setShowAllPresets] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
       setHours(Math.floor(currentDuration / 3600));
@@ -216,7 +218,7 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 24 }}
             transition={{ type: "spring", damping: 30, stiffness: 340 }}
-            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[80%] max-w-[420px] max-h-[80dvh] overflow-y-auto"
+            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[80%] max-w-[420px] max-h-[80dvh] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           >
             {/* Main glass card — same surface as LeftPanel */}
             <div
@@ -307,9 +309,17 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
 
               {/* Presets */}
               <div className="px-4 sm:px-5 pb-3 sm:pb-4 space-y-2">
-                <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
+                <div className="flex items-center justify-between pb-2">
+                  <p className="text-[10px] font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
+                  <button 
+                    onClick={() => setShowAllPresets(!showAllPresets)}
+                  className="p-1 rounded-full text-white/30 hover:text-white/70 hover:bg-white/5 transition-colors"
+                  >
+                    <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showAllPresets && "rotate-180")} />
+                  </button>
+                </div>
                 <div className="flex flex-wrap gap-2">
-                  {PRESET_TEMPLATES.map((p) => {
+                  {(showAllPresets ? PRESET_TEMPLATES.slice(0, 5) : PRESET_TEMPLATES.slice(0, 3)).map((p) => {
                     const isSel = totalSeconds === p.seconds;
                     return (
                       <button

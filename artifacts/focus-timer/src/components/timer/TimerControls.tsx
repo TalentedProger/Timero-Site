@@ -29,7 +29,7 @@ export function TimerControls({
   const isAtStart = timeLeft === duration && !isActive;
 
   return (
-    <div className="flex items-center justify-center gap-5 mt-8 z-10">
+    <div className="flex items-center justify-center gap-5 mt-10 sm:mt-12 z-10">
       {/* Reset */}
       <motion.button
         whileHover={{ scale: 1.08 }}

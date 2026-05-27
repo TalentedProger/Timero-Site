@@ -181,17 +181,15 @@ export function TimerDisplay({
             strokeWidth="3"
             strokeLinecap="round"
             strokeDasharray={circumference}
-            animate={{ strokeDashoffset }}
-            transition={{ duration: 0.6, ease: "linear" }}
-            style={{ stroke: strokeColor }}
+            animate={{ strokeDashoffset, stroke: strokeColor }}
+            transition={{ duration: 0.6, ease: "linear", stroke: { duration: 0.3 } }}
           />
           {/* Leading dot — angle=0 is visual 12-o'clock (SVG 3-o'clock due to -90deg CSS rotation) */}
           {progress > 0 && progress < 100 && (
             <motion.circle
               r="5"
-              animate={{ cx: dotCx, cy: dotCy }}
-              transition={{ duration: 0.6, ease: "linear" }}
-              style={{ fill: dotColor, filter: `drop-shadow(0 0 4px ${dotColor})` }}
+              animate={{ cx: dotCx, cy: dotCy, fill: dotColor, filter: `drop-shadow(0 0 4px ${dotColor})` }}
+              transition={{ duration: 0.6, ease: "linear", fill: { duration: 0.3 } }}
             />
           )}
           {/* Start dot at 12-o'clock when no progress */}
@@ -200,7 +198,7 @@ export function TimerDisplay({
               cx={CX + R}
               cy={CY}
               r="4"
-              style={{ fill: `${accent}60` }}
+              fill={`${accent}60`}
             />
           )}
         </svg>

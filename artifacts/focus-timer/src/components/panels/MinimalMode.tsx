@@ -67,19 +67,19 @@ export function MinimalMode({ isActive, onExit, timeLeft, isTimerActive, onToggl
           onClick={onExit}
         >
           {settings.minimalModeBg === "image" && (
-            <div className="absolute inset-0 z-[-1]">
+            <div className="absolute inset-0 z-0">
               <img 
                 src={bgImage} 
                 alt="background" 
                 className="w-full h-full object-cover"
               />
               <div
-                className="absolute inset-0"
+                className="absolute inset-0 transition-opacity duration-500"
                 style={{ background: `rgba(0,0,0,${settings.backgroundDim / 100})` }}
               />
             </div>
           )}
-          <div className="flex flex-col items-center w-full h-full justify-center relative" onClick={(e) => e.stopPropagation()}>
+          <div className="flex flex-col items-center w-full h-full justify-center relative z-10" onClick={(e) => e.stopPropagation()}>
             <motion.span
               className={cn("text-[25vw] sm:text-[18vw] leading-none font-extralight tracking-tighter text-white tabular-nums drop-shadow-2xl select-none", fontClass)}
               style={{

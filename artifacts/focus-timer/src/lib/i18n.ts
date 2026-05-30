@@ -35,6 +35,7 @@ export interface T {
   hours: string;
   minutes: string;
   quickAdd: string;
+  half: string;
   presets: string;
   recent: string;
   confirm: string;
@@ -82,6 +83,7 @@ const all: Record<LangCode, T> = {
     hours: "Hours",
     minutes: "Minutes",
     quickAdd: "Quick add",
+    half: "Half",
     presets: "Presets",
     recent: "Recent",
     confirm: "Set",
@@ -125,6 +127,7 @@ const all: Record<LangCode, T> = {
     hours: "Часы",
     minutes: "Минуты",
     quickAdd: "Добавить",
+    half: "Половина",
     presets: "Шаблоны",
     recent: "Недавние",
     confirm: "Задать",
@@ -168,6 +171,7 @@ const all: Record<LangCode, T> = {
     hours: "Horas",
     minutes: "Minutos",
     quickAdd: "Añadir",
+    half: "Mitad",
     presets: "Plantillas",
     recent: "Recientes",
     confirm: "Aplicar",
@@ -211,6 +215,7 @@ const all: Record<LangCode, T> = {
     hours: "Heures",
     minutes: "Minutes",
     quickAdd: "Ajouter",
+    half: "Moitié",
     presets: "Modèles",
     recent: "Récents",
     confirm: "Définir",
@@ -254,6 +259,7 @@ const all: Record<LangCode, T> = {
     hours: "Stunden",
     minutes: "Minuten",
     quickAdd: "Hinzufügen",
+    half: "Hälfte",
     presets: "Vorlagen",
     recent: "Zuletzt",
     confirm: "Festlegen",
@@ -297,6 +303,7 @@ const all: Record<LangCode, T> = {
     hours: "小时",
     minutes: "分钟",
     quickAdd: "添加",
+    half: "一半",
     presets: "预设",
     recent: "最近",
     confirm: "确认",
@@ -340,6 +347,7 @@ const all: Record<LangCode, T> = {
     hours: "時間",
     minutes: "分",
     quickAdd: "追加",
+    half: "半分",
     presets: "プリセット",
     recent: "最近",
     confirm: "設定",
@@ -383,6 +391,7 @@ const all: Record<LangCode, T> = {
     hours: "Horas",
     minutes: "Minutos",
     quickAdd: "Adicionar",
+    half: "Metade",
     presets: "Modelos",
     recent: "Recentes",
     confirm: "Definir",
@@ -426,6 +435,7 @@ const all: Record<LangCode, T> = {
     hours: "시간",
     minutes: "분",
     quickAdd: "추가",
+    half: "절반",
     presets: "사전 설정",
     recent: "최근",
     confirm: "설정",
@@ -469,6 +479,7 @@ const all: Record<LangCode, T> = {
     hours: "ساعات",
     minutes: "دقائق",
     quickAdd: "إضافة",
+    half: "نصف",
     presets: "القوالب",
     recent: "الأخيرة",
     confirm: "تحديد",

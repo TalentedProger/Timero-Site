@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Search, Link, Check } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
-import { backgrounds, type BgCategory } from "@/lib/backgrounds";
+import { backgrounds, type BgCategory, getBgName } from "@/lib/backgrounds";
 import { getT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,8 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
 
   const filtered = backgrounds.filter((bg) => {
     const matchCat = category === "all" || bg.category === category;
-    const matchSearch = bg.name.toLowerCase().includes(search.toLowerCase());
+    const translatedName = getBgName(bg.id, settings.language);
+    const matchSearch = translatedName.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
 
@@ -91,7 +92,6 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 className="px-5 py-2 rounded-full text-sm font-semibold text-white transition-all"
                 style={{
                   background: accent,
-                  boxShadow: `0 0 20px ${accent}55`,
                 }}
               >
                 {t.save}
@@ -148,13 +148,13 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
           </div>
 
           {/* Grid — scrollable */}
-          <div className="flex-1 overflow-y-auto px-6 pb-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          <div className="flex-1 overflow-y-auto px-6 pb-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin]" style={{ scrollbarColor: `${accent} transparent` }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
               {/* Custom preview card if set */}
               {customPreview && (
                 <button
                   onClick={() => setSelected("custom")}
-                  className="relative aspect-video rounded-2xl overflow-hidden transition-all duration-200"
+                  className="relative aspect-video rounded-2xl overflow-hidden transition-all duration-200 hover:scale-[1.02]"
                   style={{
                     border: selected === "custom" ? `2px solid ${accent}` : "2px solid rgba(255,255,255,0.08)",
                     boxShadow: selected === "custom" ? `0 0 20px ${accent}44` : undefined,
@@ -176,6 +176,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
 
               {filtered.map((bg) => {
                 const isSelected = selected === bg.id;
+                const translatedName = getBgName(bg.id, settings.language);
                 return (
                   <motion.button
                     key={bg.id}
@@ -190,12 +191,12 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                   >
                     <img
                       src={bg.url}
-                      alt={bg.name}
+                      alt={translatedName}
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/20" />
-                    <span className="absolute bottom-2 left-3 text-[11px] font-medium text-white/90">{bg.name}</span>
+                    <span className="absolute bottom-2 left-3 text-[11px] font-medium text-white/90">{translatedName}</span>
                     {isSelected && (
                       <div
                         className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"

@@ -28,24 +28,24 @@ export interface Settings {
 }
 
 const defaultSettings: Settings = {
-  selectedBackground: "ocean",
+  selectedBackground: "interior",
   customBackgroundUrl: "",
-  animationStyle: "breathe",
+  animationStyle: "none",
   animationSpeed: 50,
   selectedSound: "bell",
   volume: 50,
-  soundRepeatCount: 1,
-  soundPlayDuration: 2,
+  soundRepeatCount: 5,
+  soundPlayDuration: 5,
   defaultDuration: 25 * 60,
   autoRepeat: false,
   notificationTriggers: { "25": false, "50": false, "75": false, "100": true },
   minimalMode: false,
   timeFormat: "24h",
   accentColor: "#8b5cf6",
-  backgroundDim: 38,
+  backgroundDim: 35,
   language: "ru",
   fontFamily: "dm-sans",
-  minimalModeBg: "blur",
+  minimalModeBg: "image",
 };
 
 interface SettingsContextValue {

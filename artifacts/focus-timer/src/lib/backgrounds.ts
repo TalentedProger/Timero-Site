@@ -7,6 +7,41 @@ export interface Background {
   category: BgCategory;
 }
 
+// Background name translations
+export const bgNames: Record<string, Record<string, string>> = {
+  ocean: { en: "Ocean", ru: "Океан", es: "Océano", fr: "Océan", de: "Ozean", zh: "海洋", ja: "海", pt: "Oceano", ko: "바다", ar: "محيط" },
+  forest: { en: "Forest", ru: "Лес", es: "Bosque", fr: "Forêt", de: "Wald", zh: "森林", ja: "森", pt: "Floresta", ko: "숲", ar: "غابة" },
+  mountains: { en: "Mountains", ru: "Горы", es: "Montañas", fr: "Montagnes", de: "Berge", zh: "山脉", ja: "山", pt: "Montanhas", ko: "산", ar: "جبال" },
+  sea: { en: "Sea", ru: "Море", es: "Mar", fr: "Mer", de: "Meer", zh: "海", ja: "海", pt: "Mar", ko: "바다", ar: "بحر" },
+  roadtrip: { en: "Road Trip", ru: "Дорога", es: "Viaje", fr: "Route", de: "Straße", zh: "公路", ja: "道路", pt: "Estrada", ko: "도로", ar: "طريق" },
+  lake: { en: "Lake", ru: "Озеро", es: "Lago", fr: "Lac", de: "See", zh: "湖", ja: "湖", pt: "Lago", ko: "호수", ar: "بحيرة" },
+  waterfall: { en: "Waterfall", ru: "Водопад", es: "Cascada", fr: "Cascade", de: "Wasserfall", zh: "瀑布", ja: "滝", pt: "Cachoeira", ko: "폭포", ar: "شلال" },
+  beach: { en: "Beach", ru: "Пляж", es: "Playa", fr: "Plage", de: "Strand", zh: "海滩", ja: "ビーチ", pt: "Praia", ko: "해변", ar: "شاطئ" },
+  meadow: { en: "Meadow", ru: "Луг", es: "Pradera", fr: "Prairie", de: "Wiese", zh: "草地", ja: "草原", pt: "Prado", ko: "초원", ar: "مرج" },
+  jungle: { en: "Jungle", ru: "Джунгли", es: "Selva", fr: "Jungle", de: "Dschungel", zh: "丛林", ja: "ジャングル", pt: "Selva", ko: "정글", ar: "غابة" },
+  autumn: { en: "Autumn", ru: "Осень", es: "Otoño", fr: "Automne", de: "Herbst", zh: "秋天", ja: "秋", pt: "Outono", ko: "가을", ar: "خريف" },
+  space: { en: "Space", ru: "Космос", es: "Espacio", fr: "Espace", de: "Weltraum", zh: "太空", ja: "宇宙", pt: "Espaço", ko: "우주", ar: "فضاء" },
+  focus: { en: "Focus", ru: "Фокус", es: "Enfoque", fr: "Focus", de: "Fokus", zh: "专注", ja: "集中", pt: "Foco", ko: "집중", ar: "تركيز" },
+  galaxy: { en: "Galaxy", ru: "Галактика", es: "Galaxia", fr: "Galaxie", de: "Galaxie", zh: "星系", ja: "銀河", pt: "Galáxia", ko: "은하", ar: "مجرة" },
+  stars: { en: "Stars", ru: "Звёзды", es: "Estrellas", fr: "Étoiles", de: "Sterne", zh: "星星", ja: "星", pt: "Estrelas", ko: "별", ar: "نجوم" },
+  city: { en: "City", ru: "Город", es: "Ciudad", fr: "Ville", de: "Stadt", zh: "城市", ja: "都市", pt: "Cidade", ko: "도시", ar: "مدينة" },
+  bridge: { en: "Bridge", ru: "Мост", es: "Puente", fr: "Pont", de: "Brücke", zh: "桥", ja: "橋", pt: "Ponte", ko: "다리", ar: "جسر" },
+  interior: { en: "Interior", ru: "Интерьер", es: "Interior", fr: "Intérieur", de: "Interieur", zh: "室内", ja: "インテリア", pt: "Interior", ko: "인테리어", ar: "داخلي" },
+  arches: { en: "Arches", ru: "Арки", es: "Arcos", fr: "Arches", de: "Bögen", zh: "拱门", ja: "アーチ", pt: "Arcos", ko: "아치", ar: "أقواس" },
+  porsche: { en: "Porsche", ru: "Porsche", es: "Porsche", fr: "Porsche", de: "Porsche", zh: "保时捷", ja: "ポルシェ", pt: "Porsche", ko: "포르쉐", ar: "بورش" },
+  minimal: { en: "Minimal", ru: "Минимализм", es: "Minimalista", fr: "Minimal", de: "Minimal", zh: "极简", ja: "ミニマル", pt: "Minimalista", ko: "미니멀", ar: "بسيط" },
+  gradient: { en: "Gradient", ru: "Градиент", es: "Degradado", fr: "Dégradé", de: "Farbverlauf", zh: "渐变", ja: "グラデーション", pt: "Gradiente", ko: "그라데이션", ar: "تدرج" },
+  wallpaper: { en: "Wallpaper", ru: "Обои", es: "Fondo", fr: "Papier peint", de: "Tapete", zh: "壁纸", ja: "壁紙", pt: "Papel de parede", ko: "배경화면", ar: "خلفية" },
+  "night-city": { en: "Night City", ru: "Ночной город", es: "Ciudad nocturna", fr: "Ville de nuit", de: "Nachtstadt", zh: "夜城", ja: "夜の街", pt: "Cidade noturna", ko: "야경", ar: "مدينة ليلية" },
+  storm: { en: "Storm", ru: "Шторм", es: "Tormenta", fr: "Tempête", de: "Sturm", zh: "风暴", ja: "嵐", pt: "Tempestade", ko: "폭풍", ar: "عاصفة" },
+  "dark-forest": { en: "Dark Forest", ru: "Тёмный лес", es: "Bosque oscuro", fr: "Forêt sombre", de: "Dunkler Wald", zh: "黑森林", ja: "暗い森", pt: "Floresta escura", ko: "어두운 숲", ar: "غابة مظلمة" },
+  cave: { en: "Cave", ru: "Пещера", es: "Cueva", fr: "Grotte", de: "Höhle", zh: "洞穴", ja: "洞窟", pt: "Caverna", ko: "동굴", ar: "كهف" },
+};
+
+export function getBgName(id: string, lang: string): string {
+  return bgNames[id]?.[lang] || bgNames[id]?.en || id;
+}
+
 export const backgrounds: Background[] = [
   // Nature
   { id: "ocean",      name: "Ocean",      category: "nature",       url: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80" },

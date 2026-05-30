@@ -3,6 +3,7 @@ import { Play, Pause, RotateCcw, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/hooks/useSettings";
 import { initAudio } from "@/lib/sounds";
+import { animations } from "@/lib/animations";
 
 interface TimerControlsProps {
   isActive: boolean;
@@ -32,8 +33,8 @@ export function TimerControls({
     <div className="flex items-center justify-center gap-5 mt-10 sm:mt-12 z-10">
       {/* Reset */}
       <motion.button
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
+        whileHover={animations.smallButton.hover}
+        whileTap={animations.smallButton.tap}
         onClick={onReset}
         disabled={isAtStart}
         data-testid="button-reset"
@@ -42,13 +43,13 @@ export function TimerControls({
           isAtStart && "opacity-40 cursor-not-allowed pointer-events-none"
         )}
       >
-        <RotateCcw className="w-5 h-5 text-white/80" strokeWidth={2} />
+        <RotateCcw className="w-5 h-5 text-white/80 shrink-0" strokeWidth={2} />
       </motion.button>
 
       {/* Play / Pause — large accent button */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={animations.button.hover}
+        whileTap={animations.button.tap}
         onClick={() => {
           initAudio();
           isActive ? onPause() : onStart();
@@ -60,21 +61,21 @@ export function TimerControls({
         }}
       >
         {isActive ? (
-          <Pause className="w-8 h-8 text-white fill-white" strokeWidth={0} />
+          <Pause className="w-8 h-8 text-white fill-white shrink-0" strokeWidth={0} />
         ) : (
-          <Play className="w-8 h-8 text-white fill-white translate-x-1" strokeWidth={0} />
+          <Play className="w-8 h-8 text-white fill-white shrink-0" strokeWidth={0} style={{ marginLeft: '2px' }} />
         )}
       </motion.button>
 
       {/* Set Duration */}
       <motion.button
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
+        whileHover={animations.smallButton.hover}
+        whileTap={animations.smallButton.tap}
         onClick={onSetDuration}
         data-testid="button-set-duration"
         className="w-14 h-14 rounded-full flex items-center justify-center border border-white/10 bg-white/5 backdrop-blur-sm transition-all hover:bg-white/12 hover:border-white/20"
       >
-        <Timer className="w-5 h-5 text-white/80" strokeWidth={2} />
+        <Timer className="w-5 h-5 text-white/80 shrink-0" strokeWidth={2} />
       </motion.button>
     </div>
   );

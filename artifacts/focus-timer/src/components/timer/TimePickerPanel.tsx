@@ -5,6 +5,7 @@ import { useHistory } from "@/hooks/useHistory";
 import { useSettings } from "@/hooks/useSettings";
 import { getT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { animations } from "@/lib/animations";
 
 interface TimePickerPanelProps {
   isOpen: boolean;
@@ -205,19 +206,15 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
         <>
           <motion.div
             key="tp-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            {...animations.backdrop}
             onClick={onClose}
             className="fixed inset-0 z-40"
             style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(6px)" }}
           />
           <motion.div
             key="tp-panel"
-            initial={{ opacity: 0, scale: 0.93, y: 24 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.93, y: 24 }}
-            transition={{ type: "spring", damping: 30, stiffness: 340 }}
+            {...animations.modal}
+            transition={animations.spring}
             className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[80%] max-w-[420px] rounded-2xl sm:rounded-3xl pointer-events-none"
             style={{
               boxShadow: "0 24px 60px rgba(0,0,0,0.55)",
@@ -315,9 +312,9 @@ export function TimePickerPanel({ isOpen, currentDuration, taskName, onTaskNameC
                   <p className="text-[10px] items-center flex font-semibold text-white/28 uppercase tracking-widest">{t.presets}</p>
                   <button 
                     onClick={() => setShowAllPresets(!showAllPresets)}
-                    className="w-5 h-5 sm:w-3 sm:h-3 rounded-full flex items-center justify-center text-white/30 hover:text-white/70 bg-white/5 hover:bg-white/10 transition-colors"
+                    className="w-4 h-4 sm:w-3 sm:h-3 rounded-full flex items-center justify-center text-white/30 hover:text-white/70 bg-white/5 hover:bg-white/10 transition-colors"
                   >
-                    <ChevronDown className={cn("w-3 h-3 sm:w-2 sm:h-2 transition-transform", showAllPresets && "rotate-180")} />
+                    <ChevronDown className={cn("w-3 h-3 transition-transform", showAllPresets && "rotate-180")} />
                   </button>
                 </div>
                 <div className="flex flex-nowrap sm:flex-wrap overflow-hidden gap-2">

@@ -5,6 +5,7 @@ import { useSettings } from "@/hooks/useSettings";
 import { backgrounds, type BgCategory, getBgName } from "@/lib/backgrounds";
 import { getT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { animations } from "@/lib/animations";
 
 interface BackgroundGalleryProps {
   isOpen: boolean;
@@ -70,10 +71,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
       {isOpen && (
         <motion.div
           key="bg-gallery"
-          initial={{ opacity: 0, scale: 0.98, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.98, y: 10 }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          {...animations.gallery}
           className="fixed inset-0 z-[60] flex flex-col"
           style={{
             background: "rgba(6,6,16,0.96)",
@@ -86,8 +84,8 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
             <h2 className="text-base font-semibold text-white/90 tracking-wide">{t.allBackgrounds}</h2>
             <div className="flex items-center gap-3">
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={animations.button.hover}
+                whileTap={animations.button.tap}
                 onClick={handleSave}
                 className="px-5 py-2 rounded-full text-sm font-semibold text-white transition-all"
                 style={{
@@ -97,8 +95,8 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 {t.save}
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={animations.button.hover}
+                whileTap={animations.button.tap}
                 onClick={onClose}
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-all text-white/70 border border-white/10 hover:border-white/20 hover:text-white"
                 style={{
@@ -157,7 +155,6 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                   className="relative aspect-video rounded-2xl overflow-hidden transition-all duration-200 hover:scale-[1.02]"
                   style={{
                     border: selected === "custom" ? `2px solid ${accent}` : "2px solid rgba(255,255,255,0.08)",
-                    boxShadow: selected === "custom" ? `0 0 20px ${accent}44` : undefined,
                   }}
                 >
                   <img src={customPreview} alt="Custom" className="w-full h-full object-cover" />
@@ -180,13 +177,12 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 return (
                   <motion.button
                     key={bg.id}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={animations.card.hover}
+                    whileTap={animations.card.tap}
                     onClick={() => setSelected(bg.id)}
                     className="relative aspect-video rounded-2xl overflow-hidden transition-all duration-200"
                     style={{
                       border: isSelected ? `2px solid ${accent}` : "2px solid rgba(255,255,255,0.06)",
-                      boxShadow: isSelected ? `0 0 20px ${accent}44` : undefined,
                     }}
                   >
                     <img

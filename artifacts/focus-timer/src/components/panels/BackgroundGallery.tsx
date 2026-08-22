@@ -6,6 +6,7 @@ import { backgrounds, type BgCategory, getBgName } from "@/lib/backgrounds";
 import { getT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { animations } from "@/lib/animations";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface BackgroundGalleryProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
   const { settings, setSettings } = useSettings();
   const accent = settings.accentColor;
   const t = getT(settings.language);
+  const isMobile = useIsMobile();
 
   const [selected, setSelected] = useState(settings.selectedBackground);
   const [category, setCategory] = useState<"all" | BgCategory>("all");
@@ -66,50 +68,81 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
     return backgrounds.find((b) => b.id === id)?.url ?? "";
   };
 
+  // Оптимизированные параметры анимации
+  const animationDuration = isMobile ? 0.22 : 0.3;
+  const animationEasing = [0.32, 0.72, 0, 1];
+
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           key="bg-gallery"
-          {...animations.gallery}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.96 }}
+          transition={{ 
+            duration: animationDuration,
+            ease: animationEasing
+          }}
           className="fixed inset-0 z-[60] flex flex-col"
           style={{
-            background: "rgba(6,6,16,0.96)",
-            backdropFilter: "blur(40px)",
-            WebkitBackdropFilter: "blur(40px)",
+            background: "rgba(0,0,0,0.96)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            willChange: "opacity, transform",
           }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-white/8 shrink-0">
-            <h2 className="text-base font-semibold text-white/90 tracking-wide">{t.allBackgrounds}</h2>
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: animationDuration,
+              ease: animationEasing,
+              delay: isMobile ? 0 : 0.05
+            }}
+            className="flex items-center justify-between px-6 py-5 border-b border-white/8 shrink-0"
+          >
+            <h2 className="text-base font-semibold text-white tracking-wide">{t.allBackgrounds}</h2>
             <div className="flex items-center gap-3">
               <motion.button
-                whileHover={animations.button.hover}
-                whileTap={animations.button.tap}
+                whileHover={isMobile ? {} : { scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={handleSave}
                 className="px-5 py-2 rounded-full text-sm font-semibold text-white transition-all"
                 style={{
                   background: accent,
+                  willChange: isMobile ? "auto" : "transform",
                 }}
               >
                 {t.save}
               </motion.button>
               <motion.button
-                whileHover={animations.button.hover}
-                whileTap={animations.button.tap}
+                whileHover={isMobile ? {} : { scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={onClose}
                 className="w-10 h-10 rounded-full flex items-center justify-center transition-all text-white/70 border border-white/10 hover:border-white/20 hover:text-white"
                 style={{
                   background: "rgba(255,255,255,0.05)",
+                  willChange: isMobile ? "auto" : "transform",
                 }}
               >
                 <X className="w-4 h-4" strokeWidth={2.5} />
               </motion.button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Search */}
-          <div className="px-6 pt-5 pb-3 shrink-0">
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: animationDuration,
+              ease: animationEasing,
+              delay: isMobile ? 0 : 0.08
+            }}
+            className="px-6 pt-5 pb-3 shrink-0"
+          >
             <div
               className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-white/8"
               style={{ background: "rgba(255,255,255,0.04)" }}
@@ -122,10 +155,19 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 className="flex-1 bg-transparent text-white/80 placeholder-white/25 text-sm outline-none"
               />
             </div>
-          </div>
+          </motion.div>
 
           {/* Category pills */}
-          <div className="px-6 pb-4 flex gap-2 flex-wrap shrink-0">
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: animationDuration,
+              ease: animationEasing,
+              delay: isMobile ? 0 : 0.11
+            }}
+            className="px-6 pb-4 flex gap-2 flex-wrap shrink-0"
+          >
             {CATEGORIES.map((cat) => {
               const isActive = category === cat.key;
               return (
@@ -143,10 +185,23 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 </button>
               );
             })}
-          </div>
+          </motion.div>
 
           {/* Grid — scrollable */}
-          <div className="flex-1 overflow-y-auto px-6 pb-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin]" style={{ scrollbarColor: `${accent} transparent` }}>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ 
+              duration: animationDuration * 1.2,
+              ease: animationEasing,
+              delay: isMobile ? 0 : 0.14
+            }}
+            className="flex-1 overflow-y-auto px-6 pb-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [scrollbar-width:thin]" 
+            style={{ 
+              scrollbarColor: `${accent} transparent`,
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
               {/* Custom preview card if set */}
               {customPreview && (
@@ -155,6 +210,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                   className="relative aspect-video rounded-2xl overflow-hidden transition-all duration-200 hover:scale-[1.02]"
                   style={{
                     border: selected === "custom" ? `2px solid ${accent}` : "2px solid rgba(255,255,255,0.08)",
+                    willChange: isMobile ? "auto" : "transform",
                   }}
                 >
                   <img src={customPreview} alt="Custom" className="w-full h-full object-cover" />
@@ -177,12 +233,13 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 return (
                   <motion.button
                     key={bg.id}
-                    whileHover={animations.card.hover}
-                    whileTap={animations.card.tap}
+                    whileHover={isMobile ? {} : { scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setSelected(bg.id)}
                     className="relative aspect-video rounded-2xl overflow-hidden transition-all duration-200"
                     style={{
                       border: isSelected ? `2px solid ${accent}` : "2px solid rgba(255,255,255,0.06)",
+                      willChange: isMobile ? "auto" : "transform",
                     }}
                   >
                     <img
@@ -190,6 +247,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                       alt={translatedName}
                       className="w-full h-full object-cover"
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-black/20" />
                     <span className="absolute bottom-2 left-3 text-[11px] font-medium text-white/90">{translatedName}</span>
@@ -205,10 +263,17 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 );
               })}
             </div>
-          </div>
+          </motion.div>
 
           {/* Custom URL section */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: animationDuration,
+              ease: animationEasing,
+              delay: isMobile ? 0 : 0.17
+            }}
             className="shrink-0 px-6 py-5 border-t border-white/8"
             style={{ background: "rgba(255,255,255,0.02)" }}
           >
@@ -238,7 +303,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                 {t.applyUrl}
               </button>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

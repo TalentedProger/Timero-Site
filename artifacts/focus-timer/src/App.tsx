@@ -6,6 +6,7 @@ import { HistoryProvider } from "@/contexts/HistoryContext";
 import { useSettings } from "@/hooks/useSettings";
 import { getFontCss } from "@/lib/fonts";
 import { initAudio } from "@/lib/sounds";
+import { backgrounds } from "@/lib/backgrounds";
 
 // Lazy load pages for better performance
 const TimerPage = lazy(() => import("@/pages/TimerPage"));
@@ -20,6 +21,43 @@ function FontInjector() {
     );
     document.body.style.fontFamily = getFontCss(settings.fontFamily);
   }, [settings.fontFamily]);
+  return null;
+}
+
+// Компонент для предзагрузки фоновых изображений
+function BackgroundPreloader() {
+  useEffect(() => {
+    // Используем requestIdleCallback для предзагрузки после того как сайт загрузился
+    const preloadBackgrounds = () => {
+      const imageUrls = backgrounds.map(bg => bg.url);
+      
+      imageUrls.forEach((url, index) => {
+        // Задержка между загрузкой каждого изображения для лучшей производительности
+        setTimeout(() => {
+          const img = new Image();
+          img.src = url;
+          // Опционально: можно добавить обработчики onload/onerror для отслеживания
+        }, index * 100); // 100ms задержка между каждым изображением
+      });
+    };
+
+    // Используем requestIdleCallback если доступен, иначе setTimeout
+    if ('requestIdleCallback' in window) {
+      const idleCallbackId = requestIdleCallback(
+        () => {
+          // Дополнительная задержка чтобы убедиться что основной контент загружен
+          setTimeout(preloadBackgrounds, 1000);
+        },
+        { timeout: 2000 }
+      );
+      
+      return () => cancelIdleCallback(idleCallbackId);
+    } else {
+      const timeoutId = setTimeout(preloadBackgrounds, 2000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, []);
+
   return null;
 }
 
@@ -80,6 +118,7 @@ function App() {
       <SettingsProvider>
         <HistoryProvider>
           <FontInjector />
+          <BackgroundPreloader />
           <BrowserRouter>
             <Router />
           </BrowserRouter>

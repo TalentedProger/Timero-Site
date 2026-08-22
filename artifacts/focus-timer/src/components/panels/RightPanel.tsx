@@ -33,13 +33,13 @@ export function RightPanel({ isOpen, onClose }: RightPanelProps) {
       transition={{ type: "spring", damping: 26, stiffness: 220 }}
       className="fixed inset-y-0 right-0 w-80 sm:w-96 z-50 flex flex-col border-l border-white/8"
       style={{
-        background: "rgba(8,8,18,0.75)",
-        backdropFilter: "blur(32px)",
-        WebkitBackdropFilter: "blur(32px)",
+        background: "rgba(0,0,0,0.75)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
       }}
     >
       <div className="flex items-center justify-between px-6 py-5 border-b border-white/8">
-        <h2 className="text-base font-semibold text-white/90 tracking-wide">{t.activity}</h2>
+        <h2 className="text-base font-semibold text-white tracking-wide">{t.activity}</h2>
         <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white/50 hover:text-white">
           <X className="w-4 h-4" />
         </button>
@@ -50,7 +50,7 @@ export function RightPanel({ isOpen, onClose }: RightPanelProps) {
 
           {/* Stats */}
           <section className="space-y-4">
-            <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
+            <h3 className="text-xs font-semibold text-white uppercase tracking-widest flex items-center gap-2">
               <BarChart2 className="w-3.5 h-3.5" /> {t.statistics}
             </h3>
 
@@ -101,7 +101,7 @@ export function RightPanel({ isOpen, onClose }: RightPanelProps) {
 
           {/* History */}
           <section className="space-y-3">
-            <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
+            <h3 className="text-xs font-semibold text-white uppercase tracking-widest flex items-center gap-2">
               <History className="w-3.5 h-3.5" /> {t.recentSessions}
             </h3>
 

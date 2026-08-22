@@ -53,9 +53,9 @@ export function BottomDock({
       <div
         className="rounded-full px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-3 sm:gap-5 border border-white/10"
         style={{
-          background: "rgba(10,10,20,0.58)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
+          background: "rgba(0,0,0,0.58)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
           boxShadow: "0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
         }}
       >

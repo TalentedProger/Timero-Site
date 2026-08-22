@@ -70,13 +70,13 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
         transition={{ type: "spring", damping: 26, stiffness: 220 }}
         className="fixed inset-y-0 left-0 w-80 sm:w-96 z-50 flex flex-col border-r border-white/8"
         style={{
-          background: "rgba(8,8,18,0.75)",
-          backdropFilter: "blur(32px)",
-          WebkitBackdropFilter: "blur(32px)",
+          background: "rgba(0,0,0,0.75)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
         }}
       >
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/8">
-          <h2 className="text-base font-semibold text-white/90 tracking-wide">{t.appearance}</h2>
+          <h2 className="text-base font-semibold text-white tracking-wide">{t.appearance}</h2>
           <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white/50 hover:text-white">
             <X className="w-4 h-4" />
           </button>
@@ -88,7 +88,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
             {/* ── Background ── */}
             <section className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
+                <h3 className="text-xs font-semibold text-white uppercase tracking-widest flex items-center gap-2">
                   <ImageIcon className="w-3.5 h-3.5" /> {t.background}
                 </h3>
                 <button
@@ -140,7 +140,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
 
             {/* ── Dimming ── */}
             <section className="space-y-3">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest">{t.dimming}</h3>
+              <h3 className="text-xs font-semibold text-white uppercase tracking-widest">{t.dimming}</h3>
               <div className="flex items-center gap-3">
                 <AccentSlider
                   value={[settings.backgroundDim]}
@@ -155,11 +155,11 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
 
             {/* ── Sound ── */}
             <section className="space-y-3">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest">{t.sound}</h3>
+              <h3 className="text-xs font-semibold text-white uppercase tracking-widest">{t.sound}</h3>
               
               {/* Volume */}
               <div className="space-y-2">
-                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Громкость</span>
+                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{t.volume}</span>
                 <div className="flex items-center gap-3">
                   <AccentSlider
                     value={[settings.volume]}
@@ -174,7 +174,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
 
               {/* Repeat Count */}
               <div className="space-y-2">
-                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Кол-во повторений</span>
+                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{t.repeatCount}</span>
                 <div className="flex items-center gap-3">
                   <AccentSlider
                     value={[settings.soundRepeatCount]}
@@ -184,21 +184,6 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
                     className="flex-1"
                   />
                   <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.soundRepeatCount}</span>
-                </div>
-              </div>
-
-              {/* Play Duration */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Время проигрывания (сек)</span>
-                <div className="flex items-center gap-3">
-                  <AccentSlider
-                    value={[settings.soundPlayDuration]}
-                    onValueChange={([val]) => setSettings({ soundPlayDuration: val })}
-                    min={1} max={10} step={0.5}
-                    accent={accent}
-                    className="flex-1"
-                  />
-                  <span className="text-xs text-white/30 w-8 text-right tabular-nums">{settings.soundPlayDuration}s</span>
                 </div>
               </div>
 
@@ -235,7 +220,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
 
             {/* ── Animation ── */}
             <section className="space-y-3">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest">{t.animation}</h3>
+              <h3 className="text-xs font-semibold text-white uppercase tracking-widest">{t.animation}</h3>
               <div className="flex flex-wrap gap-2">
                 {animationOptions.map((opt) => {
                   const isActive = settings.animationStyle === opt.id;
@@ -259,7 +244,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
               {/* Animation Speed */}
               {settings.animationStyle !== "none" && (
                 <div className="space-y-2 pt-1">
-                  <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">Скорость анимации</span>
+                  <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">{t.animationSpeed}</span>
                   <div className="flex items-center gap-3">
                     <AccentSlider
                       value={[settings.animationSpeed]}
@@ -276,7 +261,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
 
             {/* ── Accent Color ── */}
             <section className="space-y-3">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
+              <h3 className="text-xs font-semibold text-white uppercase tracking-widest flex items-center gap-2">
                 <Palette className="w-3.5 h-3.5" /> {t.accentColor}
               </h3>
               <div className="grid grid-cols-5 gap-3">
@@ -308,7 +293,7 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
 
             {/* ── Font ── */}
             <section className="space-y-3">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
+              <h3 className="text-xs font-semibold text-white uppercase tracking-widest flex items-center gap-2">
                 <Type className="w-3.5 h-3.5" /> {t.font}
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -340,13 +325,13 @@ export function LeftPanel({ isOpen, onClose }: LeftPanelProps) {
 
             {/* ── Fullscreen Mode ── */}
             <section className="space-y-3 pb-4">
-              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest flex items-center gap-2">
-                <Maximize className="w-3.5 h-3.5" /> ПОЛНОЭКРАННЫЙ РЕЖИМ
+              <h3 className="text-xs font-semibold text-white uppercase tracking-widest flex items-center gap-2">
+                <Maximize className="w-3.5 h-3.5" /> {t.fullscreenMode}
               </h3>
               <div className="flex gap-2 bg-white/5 p-1 rounded-xl">
                 {[
-                  { id: "blur", label: "Размытие" },
-                  { id: "image", label: "Фон" }
+                  { id: "blur", label: t.blur },
+                  { id: "image", label: t.image }
                 ].map((opt) => {
                   const isActive = settings.minimalModeBg === opt.id;
                   return (

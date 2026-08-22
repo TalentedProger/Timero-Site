@@ -50,6 +50,16 @@ export interface T {
   noSessions: string;
   // Minimal mode
   pressEsc: string;
+  // Sound settings
+  volume: string;
+  repeatCount: string;
+  playDuration: string;
+  // Animation settings
+  animationSpeed: string;
+  // Fullscreen mode
+  fullscreenMode: string;
+  blur: string;
+  image: string;
 }
 
 const all: Record<LangCode, T> = {
@@ -96,6 +106,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "Total Focus",
     noSessions: "No sessions yet — start focusing!",
     pressEsc: "Press ESC or click to exit",
+    volume: "Volume",
+    repeatCount: "Repeat Count",
+    playDuration: "Play Duration (sec)",
+    animationSpeed: "Animation Speed",
+    fullscreenMode: "Fullscreen Mode",
+    blur: "Blur",
+    image: "Background",
   },
   ru: {
     taskPlaceholder: "Над чем вы работаете?",
@@ -140,6 +157,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "Всего фокуса",
     noSessions: "Нет сессий — начните работать!",
     pressEsc: "Нажмите ESC или кликните для выхода",
+    volume: "Громкость",
+    repeatCount: "Кол-во повторений",
+    playDuration: "Время проигрывания (сек)",
+    animationSpeed: "Скорость анимации",
+    fullscreenMode: "Полноэкранный режим",
+    blur: "Размытие",
+    image: "Фон",
   },
   es: {
     taskPlaceholder: "¿En qué te estás enfocando?",
@@ -184,6 +208,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "Enfoque total",
     noSessions: "Sin sesiones — ¡empieza a enfocarte!",
     pressEsc: "Presiona ESC o haz clic para salir",
+    volume: "Volumen",
+    repeatCount: "Repeticiones",
+    playDuration: "Duración (seg)",
+    animationSpeed: "Velocidad",
+    fullscreenMode: "Pantalla completa",
+    blur: "Desenfoque",
+    image: "Fondo",
   },
   fr: {
     taskPlaceholder: "Sur quoi vous concentrez-vous ?",
@@ -228,6 +259,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "Concentration totale",
     noSessions: "Aucune session — commencez à vous concentrer !",
     pressEsc: "Appuyez sur ESC ou cliquez pour quitter",
+    volume: "Volume",
+    repeatCount: "Répétitions",
+    playDuration: "Durée (sec)",
+    animationSpeed: "Vitesse",
+    fullscreenMode: "Plein écran",
+    blur: "Flou",
+    image: "Fond",
   },
   de: {
     taskPlaceholder: "Worauf konzentrierst du dich?",
@@ -272,6 +310,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "Fokus gesamt",
     noSessions: "Noch keine Sitzungen — fang an!",
     pressEsc: "ESC drücken oder klicken zum Beenden",
+    volume: "Lautstärke",
+    repeatCount: "Wiederholungen",
+    playDuration: "Dauer (Sek)",
+    animationSpeed: "Geschwindigkeit",
+    fullscreenMode: "Vollbild",
+    blur: "Unschärfe",
+    image: "Hintergrund",
   },
   zh: {
     taskPlaceholder: "你在专注什么？",
@@ -316,6 +361,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "专注总计",
     noSessions: "暂无会话 — 开始专注吧！",
     pressEsc: "按 ESC 或点击退出",
+    volume: "音量",
+    repeatCount: "重复次数",
+    playDuration: "播放时长（秒）",
+    animationSpeed: "动画速度",
+    fullscreenMode: "全屏模式",
+    blur: "模糊",
+    image: "背景",
   },
   ja: {
     taskPlaceholder: "何に集中していますか？",
@@ -360,6 +412,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "集中合計",
     noSessions: "セッションなし — 集中を始めましょう！",
     pressEsc: "ESCまたはクリックで終了",
+    volume: "音量",
+    repeatCount: "繰り返し回数",
+    playDuration: "再生時間（秒）",
+    animationSpeed: "速度",
+    fullscreenMode: "フルスクリーン",
+    blur: "ぼかし",
+    image: "背景",
   },
   pt: {
     taskPlaceholder: "No que você está se concentrando?",
@@ -404,6 +463,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "Foco total",
     noSessions: "Nenhuma sessão — comece a focar!",
     pressEsc: "Pressione ESC ou clique para sair",
+    volume: "Volume",
+    repeatCount: "Repetições",
+    playDuration: "Duração (seg)",
+    animationSpeed: "Velocidade",
+    fullscreenMode: "Tela cheia",
+    blur: "Desfoque",
+    image: "Fundo",
   },
   ko: {
     taskPlaceholder: "무엇에 집중하고 있나요?",
@@ -448,6 +514,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "총 집중",
     noSessions: "세션 없음 — 집중을 시작하세요!",
     pressEsc: "ESC 또는 클릭하여 종료",
+    volume: "볼륨",
+    repeatCount: "반복 횟수",
+    playDuration: "재생 시간（초）",
+    animationSpeed: "속도",
+    fullscreenMode: "전체 화면",
+    blur: "흐림",
+    image: "배경",
   },
   ar: {
     taskPlaceholder: "على ماذا تركز؟",
@@ -492,6 +565,13 @@ const all: Record<LangCode, T> = {
     totalFocusTime: "إجمالي التركيز",
     noSessions: "لا توجد جلسات — ابدأ التركيز!",
     pressEsc: "اضغط ESC أو انقر للخروج",
+    volume: "مستوى الصوت",
+    repeatCount: "عدد التكرار",
+    playDuration: "المدة（ث）",
+    animationSpeed: "السرعة",
+    fullscreenMode: "ملء الشاشة",
+    blur: "ضبابية",
+    image: "الخلفية",
   },
 };
 

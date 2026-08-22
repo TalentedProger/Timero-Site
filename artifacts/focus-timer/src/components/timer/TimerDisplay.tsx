@@ -136,7 +136,7 @@ export function TimerDisplay({
   const isPlayfair = settings.fontFamily === "playfair";
 
   return (
-    <div className="flex items-center gap-3 sm:gap-8">
+    <div className="flex items-center gap-2.5 sm:gap-6">
       {/* Minus */}
       <motion.button
         whileHover={{ scale: 1.1 }}
@@ -151,13 +151,13 @@ export function TimerDisplay({
         onContextMenu={(e) => e.preventDefault()}
         disabled={isActive}
         className={cn(
-          "w-10 h-10 sm:w-11 sm:h-11 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
+          "w-9 h-9 sm:w-10 sm:h-10 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
           isActive
             ? "opacity-0 pointer-events-none"
             : "opacity-100 hover:bg-white/12 hover:border-white/20 text-white/60 hover:text-white"
         )}
       >
-        <Minus className="w-4 h-4" strokeWidth={2.5} />
+        <Minus className="w-3.5 h-3.5" strokeWidth={2.5} />
       </motion.button>
 
       {/* Ring + digits */}
@@ -250,13 +250,13 @@ export function TimerDisplay({
         onContextMenu={(e) => e.preventDefault()}
         disabled={isActive}
         className={cn(
-          "w-10 h-10 sm:w-11 sm:h-11 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
+          "w-9 h-9 sm:w-10 sm:h-10 rounded-full inline-flex items-center justify-center border border-white/10 bg-white/5 transition-all flex-shrink-0",
           isActive
             ? "opacity-0 pointer-events-none"
             : "opacity-100 hover:bg-white/12 hover:border-white/20 text-white/60 hover:text-white"
         )}
       >
-        <Plus className="w-4 h-4" strokeWidth={2.5} />
+        <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />
       </motion.button>
     </div>
   );

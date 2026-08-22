@@ -95,6 +95,19 @@
     -webkit-overflow-scrolling: touch;
   }
   
+  /* Force GPU acceleration for smooth animations */
+  .gpu-accelerate {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Optimize images */
+  img {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
   /* Selection color */
   ::selection {
     background-color: rgba(139, 92, 246, 0.3);
@@ -110,6 +123,12 @@
   button, a {
     min-height: 44px;
     min-width: 44px;
+  }
+  
+  /* Smooth scroll optimization */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
   }
 }
 

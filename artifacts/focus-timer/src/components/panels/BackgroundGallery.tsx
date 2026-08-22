@@ -200,6 +200,9 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
             style={{ 
               scrollbarColor: `${accent} transparent`,
               WebkitOverflowScrolling: "touch",
+              overscrollBehavior: "contain",
+              transform: "translateZ(0)",
+              willChange: "scroll-position",
             }}
           >
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
@@ -240,6 +243,7 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                     style={{
                       border: isSelected ? `2px solid ${accent}` : "2px solid rgba(255,255,255,0.06)",
                       willChange: isMobile ? "auto" : "transform",
+                      transform: "translateZ(0)", // Force GPU acceleration
                     }}
                   >
                     <img
@@ -248,12 +252,17 @@ export function BackgroundGallery({ isOpen, onClose }: BackgroundGalleryProps) {
                       className="w-full h-full object-cover"
                       loading="lazy"
                       decoding="async"
+                      style={{
+                        imageRendering: "-webkit-optimize-contrast",
+                        backfaceVisibility: "hidden",
+                        transform: "translateZ(0)",
+                      }}
                     />
-                    <div className="absolute inset-0 bg-black/20" />
-                    <span className="absolute bottom-2 left-3 text-[11px] font-medium text-white/90">{translatedName}</span>
+                    <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+                    <span className="absolute bottom-2 left-3 text-[11px] font-medium text-white/90 pointer-events-none">{translatedName}</span>
                     {isSelected && (
                       <div
-                        className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center pointer-events-none"
                         style={{ background: accent }}
                       >
                         <Check className="w-3 h-3 text-white" />
